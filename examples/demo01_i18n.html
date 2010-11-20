@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Jacob.I18n</title>
+  <meta name="generator" content="BBEdit 9.5" />
+  <script src="../lib/jquery.js"></script>
+  <script src="../lib/jacob/template.js"></script>
+  <script src="../lib/jacob/i18n.js"></script>
+  <script src="../lib/jacob/i18n/datetime.js"></script>
+  <script id="code">
+$(function() {
+  I18n = new Jacob.I18n('de-CH');
+  I18n.load('../locales/de-CH.js', function() {
+    $('.example').each(function(i, example) {
+      var code   = $(example).find('code').text();
+      var result = eval(code);
+      $(example).find('.result').text(result);
+    });
+  });
+});
+  </script>
+  <script>
+// alert("i: "+i+"\ncode: "+code+"\nresult: "+result);
+$(function() {
+  function strip(text) {
+    return text.replace(/^ *\n/, '').replace(/ *\n *$/, '')
+  }
+  $('#target').text(strip($('#code').text()));
+});
+  </script>
+  <style>
+body {
+  background: #eee;
+}
+#target {
+  margin-bottom: 20px;
+}
+div.example {
+  margin: 5px 5px 15px 5px;
+  padding-left: 15px;
+  border-bottom: 1px dotted black;
+}
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 8px -15px;
+}
+p {
+  font-size: 14px;
+  margin: 5px 0 3px 0;
+}
+code {
+  font-family:   monospace, sans-serif;
+  font-size:     12px;
+  background:    #fff;
+  border:        1px solid black;
+  padding:       3px;
+  white-space:   pre;
+  display:       block;
+}
+div.result {
+  font-family:   monospace, sans-serif;
+  font-size:     12px;
+  background:    #eef;
+  padding:       3px;
+  margin-bottom: 5px;
+  border:        1px solid #669;
+}
+  </style>
+</head>
+<body>
+  <p>The code used before running the examples:</p>
+  <code id="target"></code>
+
+  <div class="examples">
+    <div class="example">
+      <h2>Example 1</h2>
+
+      <p>Code:</p>
+      <code>I18n.localize((new Date()), {format: '%A, %d. %B %Y'})</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+    </div>
+
+    <div class="example">
+      <h2>Example 2</h2>
+
+      <p>Code:</p>
+      <code>I18n.localize(123456.78, {translator: 'Currency', currency: 'CHF'})</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+    </div>
+
+    <div class="example">
+      <h2>Example 3</h2>
+
+      <p>Code:</p>
+      <code>I18n.localize(123456.78)</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+    </div>
+
+    <div class="example">
+      <h2>Example 4</h2>
+
+      <p>Code:</p>
+      <code>I18n.localize([1,2,3])</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+    </div>
+
+    <div class="example">
+      <h2>Example 5</h2>
+
+      <p>Code:</p>
+      <code>I18n.localize([1,2,3], {connector: 'or'})</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+    </div>
+  </div>
+</body>
+</html>
