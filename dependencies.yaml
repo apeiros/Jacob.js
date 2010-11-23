@@ -1,0 +1,56 @@
+# This file describes the dependencies of each jacob sub-library as a series
+# of globs
+---
+jacob:
+  globs:
+  - lib/jacob/**/*.js
+
+jacob-barrier:
+  globs:
+  - lib/jacob/barrier.js
+
+jacob-base64:
+  globs:
+  - lib/jacob/codec/base64.js
+
+jacob-codec:
+  libs:
+  - jacob-base64
+  - jacob-gzip
+  globs:
+  - lib/jacob/codec.js
+
+jacob-gzip:
+  libs:
+  - jacob-util
+  globs:
+  - lib/jacob/codec/gzip.js
+
+jacob-http:
+  libs:
+  - jacob-json
+  - jacob-util
+  globs:
+  - lib/jacob/barrier.js
+
+jacob-json:
+  globs:
+  - lib/jacob/json.js
+
+jacob-template:
+  globs:
+  - lib/jacob/template.js
+
+jacob-i18n:
+  libs:
+  - jacob-barrier
+  - jacob-http
+  - jacob-json
+  - jacob-template
+  globs:
+  - lib/jacob/i18n.js
+  - lib/jacob/i18n/**/*.js
+
+jacob-util:
+  globs:
+  - lib/jacob/util.js

@@ -6,14 +6,12 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Jacob.I18n</title>
   <meta name="generator" content="BBEdit 9.5" />
-  <script src="../lib/jquery.js"></script>
-  <script src="../lib/jacob/template.js"></script>
-  <script src="../lib/jacob/i18n.js"></script>
-  <script src="../lib/jacob/i18n/datetime.js"></script>
-  <script id="code">
+  <script defer src="../../javascripts/jquery.js"></script>
+  <script defer src="../../javascripts/jacob-dev.js"></script>
+  <script defer id="code">
 $(function() {
   I18n = new Jacob.I18n('de-CH');
-  I18n.load('../locales/de-CH.js', function() {
+  I18n.load('../../locales/de-CH.js', function() {
     $('.example').each(function(i, example) {
       var code   = $(example).find('code').text();
       var result = eval(code);

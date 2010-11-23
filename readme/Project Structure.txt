@@ -1,0 +1,29 @@
+PROJECT STRUCTURE
+
+The directories are structured as following, the audience is noted in brackets,
+e.g. [developers] means you're interest in this directory if you intend to
+work on jacob itself, while [consumers] is of interest to users of jacob:
+
+* dependencies.yaml [developers]
+  This file is used by some rake tasks (http://rake.rubyforge.org/, also see
+  `Rakefile` below).
+* examples: [consumers]
+  Contains a series of examples for the jacob libraries.
+* external: [developers]
+  Javascripts that are not part of jacob, but upon which Jacob depends
+* javascripts: [consumers]
+  The compiled minified (.js) and unminified (-dev.js) javascripts
+* lib: [developers]
+  All "classes" in a separate file. This is useful for developing. Dependencies
+  are not compiled.
+* locales: [consumers]
+  A couple of locale files for jacob-i18n.js (and jacob.js) with useful
+  translations and translators.
+* Rakefile: [developers]
+  This file defines the rake tasks. Install ruby (http://ruby-lang.org) and rake
+  (http://rake.rubyforge.org/) to run the tasks.
+* readme: [consumers, developers]
+  This directory contains a couple of readmes, some relevant for consumers,
+  some for developers.
+* README.txt: [consumers, developers]
+  The global readme file. You should read it. Or at least a part of it.

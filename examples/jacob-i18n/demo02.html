@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Jacob.I18n</title>
+  <meta name="generator" content="BBEdit 9.5" />
+  <script defer src="../../javascripts/jquery.js"></script>
+  <script defer src="../../javascripts/jacob.js"></script>
+  <script defer id="code">
+function strip(text) {
+  return text.replace(/^[\s\r\n]*|[\s\r\n]*$/g, '');
+}
+function preparePageForTranslation() {
+  $('h1,h2,h3,h4,h5,h6,p,li,th,td,a').each(function(i,o) {
+    var text = strip($(o).text());
+    if (text == strip($(o).html())) $(o).attr('data-i18nKey', text);
+  })
+}
+function translatePage(locale) {
+  if (locale) I18n.locale(locale);
+  $('html').attr('xml:lang', I18n.locale());
+  var translateElements = $('*[data-i18nKey]')
+  translateElements.each(function(i,o) {
+    //$(o).text(I18n.translate($(o).attr('data-i18nKey'), {fallback: $(o).attr('data-i18nKey')}));
+    $(o).text(I18n.translate($(o).attr('data-i18nKey'), {fallback: $(o).attr('data-i18nKey')}));
+  })
+}
+var barrier = new Jacob.Barrier();
+I18n    = new Jacob.I18n('de');
+I18n.load('demo02.en.js', barrier.wait());
+I18n.load('demo02.de.js', barrier.wait());
+$(barrier.wait());
+
+// execute when onload has triggered and english and german translations have been loaded
+barrier.release(function() {
+  preparePageForTranslation();
+  translatePage();
+});
+  </script>
+</head>
+<body>
+  <h1>title</h1>
+  <p>
+    body
+  </p>
+  <ul>
+    <li><a href="#" onclick="translatePage('en')">en</a></li>
+    <li><a href="#" onclick="translatePage('de')">de</a></li>
+</body>
+</html>

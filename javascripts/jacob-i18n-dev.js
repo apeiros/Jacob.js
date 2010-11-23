@@ -1,9 +1,295 @@
-/*--
+/*
   Copyright 2009-2010 by Stefan Rusterholz.
   All rights reserved.
   See LICENSE.txt for permissions.
---*/
 
+  jacob-barrier is a compilation of the following files:
+  * jacob/barrier.js
+*/
+
+
+/**
+ *     Jacob
+ *
+ *    JACOB
+ *    =====
+ *    
+ *    Install
+ *    -------
+ *    
+ *    1. Copy javascripts/jacob.js to your projects javascripts directory and link to it.
+ *    2. There's no step 2.
+ *    
+ *    Note: jacob.js is a compilation of all files contained in the lib/jacob
+ *    directory and is therefore all you need. The jacob-dev.js file is the same
+ *    but before minification.
+ *    
+ *    
+ *    Summary
+ *    -------
+ *    
+ *    Jacob is a library, or rather a set of libraries, which will help you with
+ *    all kinds of tasks related to javascript.
+ *    
+ *    The sublibraries are the following:
+ *    
+ *    * Jacob.I18n:
+ *      Translate strings by key, localize dates, arrays and other
+ *      objects.
+ *    * Jacob.Template:
+ *      Interpolate variables in strings like "Hello %{name}"
+ *    * Jacob.HTTP:
+ *      Handle ajax-requests and websockets
+ *    
+ *    
+ *    Examples
+ *    --------
+ *    
+ *    Here a couple of examples, for live examples, take a look at the examples/
+ *    directory.
+ *    
+ *        i18n    = new Jacob.I18n('en');
+ *        barrier = new Jacob.Barrier();
+ *        i18n.load('locales/en.js', barrier.wait());
+ *        i18n.load('locales/en-US.js', barrier.wait());
+ *        barrier.release(function() { // we have to wait for the locales to be loaded
+ *          // assuming the keys 'sites/index/title' and '/greeting' are defined in your locales files
+ *          i18n.translate('/sites/index/title');                                // => "Welcome to CompuGlobalHyperMegaNet!"
+ *          i18n.translate('/sites/%{site}/title', {segments: {site: 'value'}}); // => "Welcome to CompuGlobalHyperMegaNet!"
+ *          i18n.translate('/greeting');                                         // => "Hello %{first_name}!"
+ *          i18n.translate('/greeting', {variables: {first_name: 'Homer'}});     // => "Hello Homer!"
+ *          i18n.localize((new Date()), {format: 'date_only'});                  // => "Sunday, 23. September 2010"
+ *          i18n.localize(123456.78);                                            // => "123.456,78"
+ *          i18n.localize(123456.78, {translator: 'Currency', currency: 'CHF'}); // => "USD 123.456,78"
+ *          i18n.localize([1,2,3]);                                              // => "1, 2 and 3"
+ *          i18n.localize([1,2,3], {connector: 'or'});                           // => "1, 2 or 3"
+ *        });
+ *    
+ *    
+ *    Version
+ *    -------
+ *    
+ *    This is to be considered an early alpha version of Jacob.
+ *    
+ *    
+ *    External Dependencies
+ *    ---------------------
+ *    
+ *    Some of Jacobs sub-libraries currently depend on jQuery for some functionality:
+ *    * Jacob.HTTP
+ *    * Jacob.JSON
+ *    
+ *    
+ *    License
+ *    -------
+ *    
+ *    You can choose between MIT and BSD-3-Clause license.
+ *    License file will be added later.
+ **/
+
+if (!window.Jacob) window.Jacob = {};
+Jacob = window.Jacob;
+
+(function() {
+/* File jacob/barrier.js */
+/**
+ *    class Jacob.Barrier
+ *
+ *    ## Summary
+ *
+ *    Barrier lets you invoke multiple asynchronous functions waiting for all to
+ *    complete. This is useful in situations where you have to resolve
+ *    dependencies first.
+ *
+ *
+ *    ## Synopsis
+ *
+ *        barrier = new Jacob.Barrier();
+ *        i18n = new Jacob.I18n('de-CH');
+ *        i18n.load('locale1', barrier.wait());
+ *        i18n.load('locale2', barrier.wait());
+ *        i18n.load('locale3', barrier.wait());
+ *        barrier.release(function() {
+ *          // executed after locale1, locale2 and locale3 have been loaded
+ *        })
+ *
+ *
+ *    ## Warning
+ *
+ *    This library assumes no true concurrency in the javascript interpreter.
+ *    At the time of writing, no javascript interpreter actually offers true
+ *    concurrency, so this is not (yet) an issue. In future, it might be.
+ **/
+
+
+
+/**
+ *    new Jacob.Barrier()
+ *
+ *    ## Summary
+ *
+ *    Creates a new Barrier.
+ **/
+Jacob.Barrier = function Jacob__Barrier() {
+  this.length     = 0;
+  this._waiterID  = 0;
+  this._waiters   = {};
+  this._releasers = [];
+};
+
+
+/**
+ *    Jacob.Barrier#wait([id]) -> Object
+ *    - id: An optional identifier. If none is given, a numerical one is
+ *      generated. You SHOULD NOT manually pass in numeric IDs. Use e.g. strings
+ *      instead.
+ *
+ *    ## Summary
+ *
+ *    Blocks the barrier until the returned function is invoked.
+ *
+ *
+ *    ## Synopsis
+ *
+ *        barrier = new Jacob.Barrier();
+ *        waiter  = barrier.wait();
+ *        barrier.release(function() { alert("released!"); });
+ *        waiter(); // all waiters have been called, "released!" is displayed
+ **/
+Jacob.Barrier.prototype.wait = function Jacob__Barrier___wait(id) {
+  var barrier = this;
+  var id      = this.block(id);
+  var waiter  = function() { barrier.clear(id) };
+
+  return waiter;
+};
+
+
+/**
+ *    Jacob.Barrier#block([id]) -> Integer | id
+ *    - id: An optional identifier. If none is given, a numerical one is
+ *      generated. You SHOULD NOT manually pass in numeric IDs. Use e.g. strings
+ *      instead.
+ *
+ *    ## Summary
+ *
+ *    Blocks the barrier until the id is cleared using Jacob.Barrier#clear(id).
+ *
+ *
+ *    ## Synopsis
+ *
+ *        barrier  = new Jacob.Barrier();
+ *        block_id = barrier.block();
+ *        barrier.release(function() { alert("released!"); });
+ *        barrier.clear(block_id); // all waiters have been called, "released!" is displayed
+ **/
+Jacob.Barrier.prototype.block = function Jacob__Barrier___block(id) {
+  var id      = id || this.nextID();
+  if (!this._waiters[id]) {
+    this.length++;
+    this._waiters[id] = true;
+  }
+
+  return id;
+};
+
+
+/* INTERNAL
+ *    Jacob.Barrier#nextID() -> Integer
+ *
+ *    ## Summary
+ *
+ *    Generates a new unused ID to be used by block.
+ *
+ *
+ *    ## Synopsis
+ *
+ *        barrier  = new Jacob.Barrier();
+ *        block_id = barrier.nextID();
+ **/
+Jacob.Barrier.prototype.nextID = function Jacob__Barrier___nextID() {
+  var id = this._waiterID;
+  this._waiterID++;
+
+  return id;
+};
+
+
+/**
+ *    Jacob.Barrier#clear([id]) -> Object
+ *    - id: An optional identifier. If none is given, all blockers are cleared.
+ *
+ *    ## Summary
+ *
+ *    Clears a block in the barrier, if it was the last one blocking, it
+ *    also invokes Jacob.Barrier#triggerRelease().
+ *    Note: if all blocks are cleared, invoking clear will have no effect.
+ *
+ *
+ *    ## Synopsis
+ *
+ *        barrier  = new Jacob.Barrier();
+ *        block_id = barrier.block();
+ *        barrier.release(function() { alert("released!"); });
+ *        barrier.clear(block_id); // all waiters have been called, "released!" is displayed
+ **/
+Jacob.Barrier.prototype.clear = function Jacob__Barrier___clear(id) {
+  if (this._waiters[id]) {
+    this.length--;
+    delete this._waiters[id];
+    if (!this.length) this.triggerRelease();
+  }
+
+  return this;
+};
+
+/* INTERNAL
+ *    Jacob.Barrier#triggerRelease() -> this
+ *
+ *    ## Summary
+ *
+ *    Invokes all release callbacks.
+ *
+ *
+ *    ## Synopsis
+ *
+ *        barrier  = new Jacob.Barrier();
+ *        barrier.release(function() { alert("released!"); });
+ *        barrier.triggerRelease(); // "released!" is displayed
+ **/
+Jacob.Barrier.prototype.triggerRelease = function Jacob__Barrier___triggerRelease() {
+  for(var i=0; i<this._releasers.length; i++) this._releasers[i]();
+
+  return this;
+};
+
+
+/**
+ *    Jacob.Barrier#release(callback) -> this
+ *    - callback (Function): A function that should be invoked when all blocks
+ *      in the barrier are cleared.
+ *
+ *    ## Summary
+ *
+ *    Clears a block in the barrier, if it was the last one blocking, it
+ *    also invokes Jacob.Barrier#triggerRelease().
+ *
+ *
+ *    ## Synopsis
+ *
+ *        barrier  = new Jacob.Barrier();
+ *        barrier.release(function() { alert("released!"); });
+ *        barrier.clear(barrier.block()) // all waiters have been called, "released!" is displayed
+ **/
+Jacob.Barrier.prototype.release = function Jacob__Barrier___release(releaser) {
+  this._releasers.push(releaser);
+
+  return this;
+};
+
+
+
+/* File jacob/i18n.js */
 /**
  *    class Jacob.I18n
  *
@@ -890,3 +1176,379 @@ Jacob.I18n.builtIn = {
     }
   }
 };
+
+
+
+/* File jacob/i18n/datetime.js */
+/* Utilities */
+var DaysUntilMonthNormal = [0,31,59,90,120,151,181,212,243,273,304,334,365];
+var DaysUntilMonthLeap   = [0,31,60,91,121,152,182,213,244,274,305,335,366];
+
+function padLeft(string, padding, size) {
+  string = string.toString();
+  while(size-string.length > 0) string = padding+string;
+  return string;
+}
+function t(i18n, key, options) {
+  return i18n.translate('/translators/Date/'+key, options);
+}
+function isLeapYear(year) {
+  return !(year%400 && (!(year%100) || year%4));
+}
+function dayOfYear(date) {
+  var daysInMonth = isLeapYear(date.getFullYear()) ? DaysUntilMonthLeap : DaysUntilMonthNormal;
+
+  return daysInMonth[date.getMonth()]+date.getDate();
+}
+function ISO8601Week(date) {
+  var doy  = dayOfYear(date);
+  var fwd  = (date.getDay()-doy)%7 // calculate weekday of first day in year
+  if (fwd < 0) fwd+=7;
+
+  if (doy <= 3 && doy <= 7-fwd) { // last week of last year
+    switch(fwd) {
+      case 6:  return 52;
+      case 5:  return isLeapYear(date.getFullYear()-1) ? 53 : 52;
+      case 4:  return 53;
+      default: return 1;
+    }
+  } else { // calculate week number
+    var off  = (10-fwd)%7-2;   // calculate offset of the first week
+    if (off < 0) off+=7;
+    var week = Math.floor((doy-off)/7)+1;
+    if (week > 52) {
+      week = (fwd == 3 || (isLeapYear(date.getFullYear()) && fwd == 2)) ? 53 : 1;
+    }
+    return week;
+  }
+}
+function ISO8601WeekYear(date) {
+  var isoWeek = ISO8601Week(date);
+  var doy     = dayOfYear(date);
+  if (isoWeek == 1 && doy > 14) {
+    return date.getFullYear()+1;
+  } else if (isoWeek > 51 && doy < 14) {
+    return date.getFullYear()-1;
+  } else {
+    return date.getFullYear();
+  }
+}
+
+/* The strftime function */
+Jacob.I18n.strftime = function(date, format, i18n) {
+  i18n = i18n || (new Jacob.I18n());
+  var mapping   = Jacob.I18n.Datetime.mapping;
+  var functions = Jacob.I18n.Datetime.functions;
+  var oldFormat;
+
+  // break up composites (e.g. %D -> %m/%d/%y)
+  do {
+    oldFormat = format
+    format    = oldFormat.replace(Jacob.I18n.Datetime.compositeRegex, function(match) {
+      return Jacob.I18n.Datetime.composite[match];
+    })
+  } while(format != oldFormat);
+
+  format = format.replace(/%[^\{%tn]|%\{\w+\}/g, function(match) {
+    var mapper  = mapping[match];
+    return mapper ? functions[mapper](date, i18n) : match;
+  });
+  format = format.replace(/%t/, "\t").replace(/%n/, "\n").replace(/%%/, '%');
+
+  return format;
+}
+
+/* Translation routines */
+Jacob.I18n.Datetime = {};
+Jacob.I18n.Datetime.functions = {
+  'dateAndTime':                        function(date, i18n) { throw('Not implemented'); },
+  'date':                               function(date, i18n) { throw('Not implemented'); },
+  'time':                               function(date, i18n) { throw('Not implemented'); },
+  'dateTimeAndTimezone':                function(date, i18n) { throw('Not implemented'); },
+
+  'abbreviatedMonthName':               function(date, i18n) { return t(i18n, 'abbreviatedMonth/%{month}', {segments: {month: date.getMonth()+1}}); },
+  'abbreviatedWeekdayName':             function(date, i18n) { return t(i18n, 'abbreviatedDayOfWeek/%{weekday}', {segments: {weekday: date.getDay()}}); },
+  'fullMonthName':                      function(date, i18n) { return t(i18n, 'month/%{month}', {segments: {month: date.getMonth()+1}}); },
+  'fullWeekdayName':                    function(date, i18n) { return t(i18n, 'dayOfWeek/%{weekday}', {segments: {weekday: date.getDay()}}); },
+  // Monday as the first day of the week, 1-7
+  'iso8601DayOfWeek':                   function(date, i18n) { return(date.getDay() || 7); },
+  'meridiemIndicator':                  function(date, i18n) { return t(i18n, 'meridiemIndicator/%{value}', {segments: {value: date.getHours() < 12 ? 'am' : 'pm'}}); },
+  'secondsSinceEpoch':                  function(date, i18n) { return Math.floor(date.getTime()); },
+  'timezoneName':                       function(date, i18n) { throw('Not implemented'); },
+  'timezoneUTCOffset':                  function(date, i18n) {
+    var offset=date.getTimezoneOffset();
+    return((offset > 0 ? '-' : '+')+padLeft(Math.round(Math.abs(offset)/60), '0', 2)+padLeft(Math.abs(offset)%60, '0', 2));
+  },
+
+  // (ISO 8601) This year is the one that contains the greater part of the week (Monday as the first day of the week).
+  'zeroPaddedFourDigitISO8601WeekYear': function(date, i18n) { return padLeft(ISO8601WeekYear(date), '0', 4); },
+  // (ISO 8601)
+  'zeroPaddedTwoDigitISO8601WeekYear':  function(date, i18n) { return padLeft(ISO8601WeekYear(date)%100, '0', 2); },
+  'zeroPaddedDayOfYear':                function(date, i18n) { return padLeft(dayOfYear(date), '0', 3); },
+  // Sunday as the first day of the week, 00-53
+  'zeroPaddedSundayBasedWeek':          function(date, i18n) { throw('Not implemented'); },
+  // (ISO 8601) Monday as the first day of the week, 01-53. If the week
+  // containing January 1 has four or more days in the new year, then it is
+  // week 1 otherwise it is the last week of the previous year, and the next
+  // week is week 1.
+  'zeroPaddedWeek':                     function(date, i18n) { return padLeft(ISO8601Week(date), '0', 2); },
+  // Monday as the first day of the week, 00-53
+  'zeroPaddedMondayBasedWeek':          function(date, i18n) { throw('Not implemented'); },
+  // Sunday as the first day of the week, 0-6.
+  'zeroBasedDayOfWeek':                 function(date, i18n) { return date.getDay(); },
+
+  'spacePaddedDayOfMonth':              function(date, i18n) { return padLeft(date.getDate(), ' ', 2); },
+  'spacePadded24hHour':                 function(date, i18n) { return padLeft(date.getHours(), ' ', 2); },
+  'spacePadded12hHour':                 function(date, i18n) { var hour=(date.getHours() % 12); return padLeft(hour || 12, ' ', 2); },
+
+  'zeroPaddedDayOfMonth':               function(date, i18n) { return padLeft(date.getDate(), '0', 2); },
+  'zeroPaddedNumericMonth':             function(date, i18n) { return padLeft(date.getMonth(), '0', 2); },
+  'zeroPaddedFourDigitYear':            function(date, i18n) { return padLeft(date.getFullYear(), '0', 4); },
+  'zeroPaddedTwoDigitYear':             function(date, i18n) { return padLeft(date.getFullYear() % 100, '0', 2); },
+  'zeroPadded24hHour':                  function(date, i18n) { return padLeft(date.getHours(), '0', 2); },
+  'zeroPadded12hHour':                  function(date, i18n) { var hour=(date.getHours() % 12); return padLeft(hour || 12, '0', 2); },
+  'zeroPaddedMinute':                   function(date, i18n) { return padLeft(date.getMinutes(), '0', 2); },
+  'zeroPaddedSecond':                   function(date, i18n) { return padLeft(date.getSeconds(), '0', 2); },
+  'zeroPaddedMillisecond':              function(date, i18n) { return padLeft(date.getMilliseconds(), '0', 3); },
+  'zeroPaddedCentury':                  function(date, i18n) { return padLeft(Math.floor(date.getFullYear()/100), '0', 2); },
+  //'percent':                 function(date, i18n) { return '%%'; },
+}
+Jacob.I18n.Datetime.composite = {
+  '%D': '%m/%d/%y',
+  '%F': '%Y-%m-%d',
+  '%R': '%H:%M',
+  '%r': '%I:%M:%S %p',
+  '%T': '%H:%M:%S',
+  '%v': '%e-%b-%Y',
+  '%h': '%b'
+}
+Jacob.I18n.Datetime.compositeRegex = /%[DFRrTvh]/g
+Jacob.I18n.Datetime.mapping = {
+  '%A': 'fullWeekdayName',
+  '%a': 'abbreviatedWeekdayName',
+  '%B': 'fullMonthName',
+  '%b': 'abbreviatedMonthName',
+  '%C': 'zeroPaddedCentury',
+  '%c': 'dateAndTime',
+  '%d': 'zeroPaddedDayOfMonth',
+  '%H': 'zeroPadded24hHour',
+  '%I': 'zeroPadded12hHour',
+  '%M': 'zeroPaddedMinute',
+  '%k': 'spacePadded24hHour',
+  '%l': 'spacePadded12hHour',
+  '%m': 'zeroPaddedNumericMonth',
+  '%p': 'meridiemIndicator',
+  '%Y': 'zeroPaddedFourDigitYear',
+  '%y': 'zeroPaddedTwoDigitYear',
+  '%S': 'zeroPaddedSecond',
+  '%e': 'spacePaddedDayOfMonth',
+  '%G': 'zeroPaddedFourDigitISO8601WeekYear',
+  '%g': 'zeroPaddedTwoDigitISO8601WeekYear',
+  '%j': 'zeroPaddedDayOfYear',
+  '%s': 'secondsSinceEpoch',
+  '%U': 'zeroPaddedSundayBasedWeek',
+  '%u': 'iso8601DayOfWeek',
+  '%V': 'zeroPaddedWeek',
+  '%W': 'zeroPaddedMondayBasedWeek',
+  '%w': 'zeroBasedDayOfWeek',
+  '%X': 'time',
+  '%x': 'date',
+  '%Z': 'timezoneName',
+  '%z': 'timezoneUTCOffset',
+  '%+': 'dateTimeAndTimezone',
+
+  '%{ms}': 'zeroPaddedMillisecond',
+  //'%%': 'percent'
+  //'%t': 'tab'
+  //'%n': 'newline'
+}
+
+
+
+/* File jacob/json.js */
+/**
+ *  mixin Jacob.JSON
+ *
+ *  ## Summary
+ *
+ *    Parse JSON Strings to objects and dump objects to JSON Strings
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.JSON.parse(string) -> Object
+ *      Jacob.JSON.dump(object)  -> String
+ *
+ *
+ *  ## External Dependencies
+ *
+ *  Jacob.JSON currently depends on jQuery.
+ **/
+
+
+
+Jacob.JSON = {name: 'Jacob__JSON'};
+
+Jacob.JSON.parse = jQuery.parseJSON;
+Jacob.JSON.dump  = function Jacob__JSON__dump() {
+  throw("Not yet implemented");
+};
+
+
+
+/* File jacob/template.js */
+/** 
+ *  class Jacob.Template
+ *
+ *
+ *  ## Summary
+ *
+ *  Jacob.Template replaces sequences in strings by identifier or position.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      template = new Jacob.Template('Hello %{entity}!');
+ *      template.identifiers()                     // => ['entity']
+ *      template.interpolate({'entity': 'World'}); // => 'Hello World!'
+ *      Jacob.Template.interpolate('Hello %{entity}!');
+ **/
+
+
+/**
+ *    new Jacob.Template(templateString, options)
+ *
+ *    - templateString (String): A string to interpolate. Variables use the
+ *      sequence %{variablename}. Example: "Hello %{firstName}". In this string,
+ *      firstName is a variable that can be interpolated.
+ *    - options (Object): A hash with options. Valid options are:
+ *      * missingKey: A function that is invoked upon a missing key.
+ *      * superfluousKey: A function that is invoked upon a superfluous key.
+ *
+ **/
+Jacob.Template = function Jacob__Template(templateString, options) {
+  if (typeof(templateString) !== 'string') throw("ArgumentError, Invalid template ("+typeof(templateString)+")");
+
+  this._templateString = templateString;
+  this._options        = options || {}
+  if (this._options.missingKey === undefined)      this._options.missingKey      = Jacob.Template.MissingKeyHandler;
+  if (this._options.superfluousKeys === undefined) this._options.superfluousKeys = Jacob.Template.SuperfluousKeysHandler;
+}
+
+
+Jacob.Template.MissingKeyHandler = function Jacob__Template__MissingKeyHandler(template, missingKey, options, variables) {
+  var givenKeys = [];
+  for(var key in variables) givenKeys.push(key);
+  throw("Missing key '"+missingKey+"', given: '"+givenKeys.join("', '")+"'");
+}
+Jacob.Template.SuperfluousKeysHandler = function Jacob__Template__MissingKeyHandler(template, superfluousKeys, options, variables) {
+  throw("Superfluous keys '"+superfluousKeys.join("', '")+"'");
+}
+
+
+/** 
+ *  Jacob.Template.interpolate(templateString[, options], variables) -> String
+ *  - templateString (String): The template string to interpolate the variables into.
+ *  - options (Object):        Same options as the Jacob.Template constructor accepts.
+ *  - variables (Object):      The variables to interpolate into the template.
+ **/
+Jacob.Template.interpolate = function Jacob__Template__interpolate(templateString, options, variables) {
+  if (arguments.length == 2) {
+    variables = options;
+    options   = {};
+  }
+  var template = new this(templateString, options);
+
+  return template.interpolate(variables);
+};
+
+Jacob.Template.prototype.identifiers = function Jacob_Template___identifiers() {
+  var identifiers = this._templateString.match(/%\{\w+\}/g);
+  var i           = identifiers.length;
+  while(i--) identifiers[i] = identifiers[i].substr(2,identifiers[i].length-3);
+
+  return identifiers;
+}
+Jacob.Template.prototype.interpolate = function Jacob_Template___interpolate(variables, options) {
+  var self            = this; // for the various closures
+  options             = options || {};
+  variables           = variables || {};
+
+  for(var key in this._options) if (options[key] === undefined) options[key] = this._options[key];
+
+  // store all keys to detect superfluous keys later
+  var superfluousKeys = {};
+  for(var key in variables) superfluousKeys[key] = true;
+
+  var replaced = this._templateString.replace(/%\{\w+\}/g, function(match) {
+    var identifier = match.substr(2,match.length-3);
+
+    if (variables[identifier] !== undefined) {
+      return variables[identifier];
+    } else if (options.missingKey) {
+      return options.missingKey(self, identifier, options, variables);
+    }
+  });
+  if (superfluousKeys.length > 0 && options.superfluousKeys) {
+    var superfluousKeysArray = [];
+    for(var key in superfluousKeys) superfluousKeysArray.push(key);
+    options.superfluousKeys(self, superfluousKeysArray, options, variables);
+  }
+
+  return replaced;
+}
+
+
+
+/* File jacob/util.js */
+/**
+ *    mixin Jacob.Util
+ *
+ *    # Summary
+ *
+ *    Provides some utility functions.
+ **/
+Jacob.Util = {};
+
+
+/** 
+ *  Jacob.Util.clone(source) -> Object
+ *  - source (Object): The object to clone.
+ *
+ *  ## Summary
+ *
+ *  Copies an object, copying all its properties. The copy is shallow.
+ **/
+Jacob.Util.clone  = function Jacob__Util__clone(source) {
+  return Jacob.Util.extend({}, source);
+}
+
+/** 
+ *  Jacob.Util.extend(target, source) -> Object
+ *  - source (Object): The object from which to copy the properties.
+ *  - target (Object): The object which to extend with the properties from
+ *    source.
+ *
+ *  ## Summary
+ *
+ *  Copies all properties from one object (source) to another (target).
+ **/
+Jacob.Util.extend = function Jacob__Util__extend(target, source) {
+  for (var property in source ) {
+    var getter = source.__lookupGetter__(property)
+
+    if (getter) {
+      target.__defineGetter__(property, getter);
+    } else {
+      var setter = source.__lookupSetter__(property);
+      if (setter) {
+        target.__defineSetter__(property, setter);
+      } else {
+        target[property] = source[property];
+      }
+    }
+  }
+
+  return target;
+}
+})();
