@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Jacob.I18n</title>
+  <meta name="generator" content="BBEdit 9.5" />
+  <script defer src="../../javascripts/jquery.js"></script>
+  <script defer src="../../javascripts/jacob.js"></script>
+  <script defer id="code">
+I18n = null;
+
+function strip(text) {
+  return text.replace(/^[\s\r\n]*|[\s\r\n]*$/g, '');
+}
+function preparePageForTranslation() {
+  // let I18n take the initial locale from the <html> tag
+  I18n               = new Jacob.I18n();
+  var locale         = I18n.locale();
+  I18n.defaultLocale = locale;
+  I18n.loadedLocales = {}
+  I18n.loadedLocales[locale] = true;
+  var defaultTranslations = {};
+  $('h1,h2,h3,h4,h5,h6,p,li,th,td,a').each(function(i,o) {
+    var text = strip($(o).text());
+    if (text == strip($(o).html())) {
+      defaultTranslations[text] = text;
+      $(o).attr('data-i18nKey', text);
+    }
+  })
+  I18n.addTranslations(locale, defaultTranslations);
+}
+function translatePage(locale) {
+  if (locale) {
+    I18n.locale(locale);
+  } else {
+    locale = I18n.locale();
+  }
+  barrier = new Jacob.Barrier();
+  waiter  = barrier.wait();
+  barrier.release(function() {
+    $('html').attr('xml:lang', locale);
+    var translateElements = $('*[data-i18nKey]')
+    translateElements.each(function(i,o) {
+      //$(o).text(I18n.translate($(o).attr('data-i18nKey'), {fallback: $(o).attr('data-i18nKey')}));
+      $(o).text(I18n.translate($(o).attr('data-i18nKey'), {fallback: $(o).attr('data-i18nKey')}));
+    })
+  });
+
+  if (I18n.loadedLocales[locale]) {
+    waiter();
+  } else {
+    I18n.load('demo03.'+locale+'.js', waiter);
+  }
+}
+
+// Back-Up all the current text and set the locale taken from the <html> tag as
+// the defaultLocale
+$(preparePageForTranslation);
+  </script>
+</head>
+<body>
+  <h1>Hello Visitor!</h1>
+  <p>
+    This page is automatically translated.
+  </p>
+  <ul>
+    <li><a href="#en" onclick="translatePage('en')">en</a></li>
+    <li><a href="#de" onclick="translatePage('de')">de</a></li>
+</body>
+</html>

@@ -38,6 +38,8 @@ jacob-json:
   - lib/jacob/json.js
 
 jacob-template:
+  libs:
+  - jacob-util
   globs:
   - lib/jacob/template.js
 

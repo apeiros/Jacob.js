@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Jacob.I18n</title>
+  <meta name="generator" content="BBEdit 9.5" />
+  <script defer src="../../javascripts/jquery.js"></script>
+  <script defer src="../../javascripts/jacob.js"></script>
+  <script defer id="code">
+var I18n;
+
+function initiateI18n() {
+  if (I18n) return;
+  Jacob.I18n.defaultLocale = 'en';
+  I18n                     = new Jacob.I18n(); // get locale from <html> tag's xml:lang or lang attribute
+  I18n._loadedLocales['demo04.'+Jacob.I18n.defaultLocale+'.js'] = true; // fake the default locale already having been loaded (as it's "inlined" in the DOM)
+  I18n.inferTranslationsFromNode();
+  translatePage(); // translate to the initial locale
+}
+
+function translatePage(locale) {
+  locale = I18n.locale(locale); // set & get the locale (will just return the current locale if none was passed in as argument)
+  I18n.load('demo04.'+locale+'.js', function() { I18n.translateNode(); });
+}
+
+if (window.addEventListener) window.addEventListener('DOMContentLoaded', initiateI18n, false); // this one is earlier, if it exists
+$(initiateI18n); // this one is more reliable/cross-browser
+  </script>
+</head>
+<body>
+  <h1>Hello Visitor!</h1>
+  <p>
+    This page is automatically translated.
+  </p>
+  <ul>
+    <li><a href="#en" onclick="translatePage('en')">en</a></li>
+    <li><a href="#de" onclick="translatePage('de')">de</a></li>
+</body>
+</html>

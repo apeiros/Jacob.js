@@ -3,8 +3,17 @@
   All rights reserved.
   See LICENSE.txt for permissions.
 
-  jacob-barrier is a compilation of the following files:
+  jacob is a compilation of the following files:
   * jacob/barrier.js
+  * jacob/codec.js
+  * jacob/codec/base64.js
+  * jacob/codec/gzip.js
+  * jacob/http.js
+  * jacob/i18n.js
+  * jacob/i18n/datetime.js
+  * jacob/json.js
+  * jacob/template.js
+  * jacob/util.js
 */
 
 
@@ -308,7 +317,7 @@ Jacob.Barrier.prototype.release = function Jacob__Barrier___release(releaser) {
 Jacob.Codec = {name: 'Jacob__Codec'};
 
 
-/**
+/** alias of: Jacob.Codec.GZip.gunzip
  *  Jacob.Codec.GZipDecode(string) -> unzipped (String)
  *
  *  ## Summary
@@ -321,10 +330,10 @@ Jacob.Codec = {name: 'Jacob__Codec'};
  *
  *      Jacob.Codec.GZipDecode(string)   // => Object
  **/
-Jacob.Codec.GZipDecode   = Jacob.GZip.gunzip;
+Jacob.Codec.GZipDecode = function() { return Jacob.Codec.GZip.gunzip.apply(Jacob.Codec.GZip, arguments); }
 
 
-/**
+/** alias of: Jacob.Codec.Base64.encode
  *  Jacob.Codec.base64Encode(string) -> base64 encoded (String)
  *
  *  ## Summary
@@ -337,10 +346,10 @@ Jacob.Codec.GZipDecode   = Jacob.GZip.gunzip;
  *
  *      Jacob.Codec.base64Encode(string)   // => base64 encoded (String)
  **/
-Jacob.Codec.base64Encode = Jacob.Base64.encode;
+Jacob.Codec.base64Encode = function() { return Jacob.Codec.Base64.encode.apply(Jacob.Codec.Base64, arguments); }
 
 
-/**
+/** alias of: Jacob.Codec.Base64.decode
  *  Jacob.Codec.base64Decode(string) -> base64 decoded (String)
  *
  *  ## Summary
@@ -353,7 +362,7 @@ Jacob.Codec.base64Encode = Jacob.Base64.encode;
  *
  *      Jacob.Codec.base64Decode(string)   // => decoded (String)
  **/
-Jacob.Codec.base64Decode = Jacob.Base64.decode;
+Jacob.Codec.base64Decode = function() { return Jacob.Codec.Base64.decode.apply(Jacob.Codec.Base64, arguments); }
 
 
 
@@ -378,7 +387,7 @@ Jacob.Codec.base64Decode = Jacob.Base64.decode;
  *    * Find the library this was derived from to give proper credit.
  *    * Move the private functions to Jacob.Util.
  **/
-Jacob.Codec.Base64 = {}
+Jacob.Codec.Base64 = {name: 'Jacob__Codec__Base64'};
 
 
 /* INTERNAL
@@ -638,7 +647,7 @@ Jacob.Codec.Base64._destrip = function Jacob__Codec__Base64___destrip(stripped, 
 
 /* File jacob/codec/gzip.js */
 /**
- *  class Jacob.GZip
+ *  class Jacob.Codec.GZip
  *
  *  ## Summary
  *
@@ -647,7 +656,7 @@ Jacob.Codec.Base64._destrip = function Jacob__Codec__Base64___destrip(stripped, 
  *
  *  ## Synopsis
  *
- *      Jacob.GZip.gunzip(string) // => String
+ *      Jacob.Codec.GZip.gunzip(string) // => String
  *
  *
  *  ## ToDo
@@ -658,14 +667,14 @@ Jacob.Codec.Base64._destrip = function Jacob__Codec__Base64___destrip(stripped, 
 
 
 /**
- *  new Jacob.GZip()
+ *  new Jacob.Codec.GZip()
  *  - data (Array | String): The bytestream to decompress
  *
  *  ## Summary
  *
- *  See Jacob.GZip.gunzip.
+ *  See Jacob.Codec.GZip.gunzip.
  **/
-Jacob.GZip = function Jacob__GZip(data) {
+Jacob.Codec.GZip = function Jacob__GZip(data) {
   this.data            = data;
 
   this.debug           = false;
@@ -680,7 +689,7 @@ Jacob.GZip = function Jacob__GZip(data) {
   this.bits            = 0;
   this.nameBuf         = [];
   this.fileout         = undefined;
-  this.literalTree     = new Array(Jacob.GZip.LITERALS);
+  this.literalTree     = new Array(Jacob.Codec.GZip.LITERALS);
   this.distanceTree    = new Array(32);
   this.treepos         = 0;
   this.Places          = null;
@@ -693,7 +702,7 @@ Jacob.GZip = function Jacob__GZip(data) {
 
 
 /**
- *  Jacob.GZip.gunzip(data) -> String
+ *  Jacob.Codec.GZip.gunzip(data) -> String
  *  - data (Array | String): The bytestream to decompress. Either an array of
  *    Integers between 0 and 255, or a String.
  *
@@ -701,15 +710,15 @@ Jacob.GZip = function Jacob__GZip(data) {
  *
  *  Unzips the gzipped data of the 'data' argument.
  **/
-Jacob.GZip.gunzip = function(string) {
+Jacob.Codec.GZip.gunzip = function(string) {
   if (string.constructor === Array) {
   } else if (string.constructor === String) {
   }
-  var gzip = new Jacob.GZip(string);
-  return gzip.gunzip(); //[0][0];
+  var gzip = new Jacob.Codec.GZip(string);
+  return gzip.gunzip()[0][0];
 }
 
-Jacob.GZip.HufNode = function() {
+Jacob.Codec.GZip.HufNode = function() {
   this.b0      = 0;
   this.b1      = 0;
   this.jump    = null;
@@ -719,10 +728,10 @@ Jacob.GZip.HufNode = function() {
 
 
 /* Constants */
-Jacob.GZip.LITERALS   = 288;
-Jacob.GZip.NAMEMAX    = 256;
+Jacob.Codec.GZip.LITERALS   = 288;
+Jacob.Codec.GZip.NAMEMAX    = 256;
 
-Jacob.GZip.bitReverse = [
+Jacob.Codec.GZip.bitReverse = [
   0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
   0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0,
   0x08, 0x88, 0x48, 0xc8, 0x28, 0xa8, 0x68, 0xe8,
@@ -756,32 +765,32 @@ Jacob.GZip.bitReverse = [
   0x0f, 0x8f, 0x4f, 0xcf, 0x2f, 0xaf, 0x6f, 0xef,
   0x1f, 0x9f, 0x5f, 0xdf, 0x3f, 0xbf, 0x7f, 0xff
 ];
-Jacob.GZip.cplens = [
+Jacob.Codec.GZip.cplens = [
   3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
   35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0
 ];
-Jacob.GZip.cplext = [
+Jacob.Codec.GZip.cplext = [
   0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2,
   3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, 99, 99
 ]; /* 99==invalid */
-Jacob.GZip.cpdist = [
+Jacob.Codec.GZip.cpdist = [
   0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0007, 0x0009, 0x000d,
   0x0011, 0x0019, 0x0021, 0x0031, 0x0041, 0x0061, 0x0081, 0x00c1,
   0x0101, 0x0181, 0x0201, 0x0301, 0x0401, 0x0601, 0x0801, 0x0c01,
   0x1001, 0x1801, 0x2001, 0x3001, 0x4001, 0x6001
 ];
-Jacob.GZip.cpdext = [
+Jacob.Codec.GZip.cpdext = [
   0,  0,  0,  0,  1,  1,  2,  2,
   3,  3,  4,  4,  5,  5,  6,  6,
   7,  7,  8,  8,  9,  9, 10, 10,
   11, 11, 12, 12, 13, 13
 ];
-Jacob.GZip.border = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+Jacob.Codec.GZip.border = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
 
 
 
 /* Instance methods */
-Jacob.GZip.prototype.gunzip = function() {
+Jacob.Codec.GZip.prototype.gunzip = function() {
   this.outputArr = [];
 
   //convertToByteArray(input);
@@ -791,7 +800,7 @@ Jacob.GZip.prototype.gunzip = function() {
   return this.unzipped;
 }
 
-Jacob.GZip.prototype.readByte = function() {
+Jacob.Codec.GZip.prototype.readByte = function() {
   this.bits+=8;
   if (this.bytepos < this.data.length) {
     //return this.data[this.bytepos++]; // Array
@@ -801,11 +810,11 @@ Jacob.GZip.prototype.readByte = function() {
   }
 };
 
-Jacob.GZip.prototype.byteAlign = function(){
+Jacob.Codec.GZip.prototype.byteAlign = function(){
   this.bb = 1;
 };
 
-Jacob.GZip.prototype.readBit = function(){
+Jacob.Codec.GZip.prototype.readBit = function(){
   var carry;
   this.bits++;
   carry = (this.bb & 1);
@@ -818,27 +827,27 @@ Jacob.GZip.prototype.readBit = function(){
   return carry;
 };
 
-Jacob.GZip.prototype.readBits = function(a) {
+Jacob.Codec.GZip.prototype.readBits = function(a) {
   var res = 0,
       i   = a;
 
   while(i--) res = (res<<1) | this.readBit();
-  if (a) res = Jacob.GZip.bitReverse[res]>>(8-a);
+  if (a) res = Jacob.Codec.GZip.bitReverse[res]>>(8-a);
 
   return res;
 };
 
-Jacob.GZip.prototype.flushBuffer = function(){
+Jacob.Codec.GZip.prototype.flushBuffer = function(){
   this.bIdx = 0;
 };
 
-Jacob.GZip.prototype.addBuffer = function(a){
+Jacob.Codec.GZip.prototype.addBuffer = function(a){
   this.buf32k[this.bIdx++] = a;
   this.outputArr.push(String.fromCharCode(a));
   if (this.bIdx==0x8000) this.bIdx=0;
 };
 
-Jacob.GZip.prototype.IsPat = function() {
+Jacob.Codec.GZip.prototype.IsPat = function() {
   while (1) {
     if (this.fpos[this.len] >= this.fmax)       return -1;
     if (this.flens[this.fpos[this.len]] == this.len) return this.fpos[this.len]++;
@@ -846,7 +855,7 @@ Jacob.GZip.prototype.IsPat = function() {
   }
 };
 
-Jacob.GZip.prototype.Rec = function() {
+Jacob.Codec.GZip.prototype.Rec = function() {
   var curplace = this.Places[this.treepos];
   var tmp;
   //if (this.debug) document.write("<br>len:"+this.len+" treepos:"+this.treepos);
@@ -884,7 +893,7 @@ Jacob.GZip.prototype.Rec = function() {
   return 0;
 }
 
-Jacob.GZip.prototype.CreateTree = function(currentTree, numval, lengths, show) {
+Jacob.Codec.GZip.prototype.CreateTree = function(currentTree, numval, lengths, show) {
   var i;
   /* Create the Huffman decode tree/table */
   //if (this.debug) document.write("currentTree "+currentTree+" numval "+numval+" lengths "+lengths+" show "+show);
@@ -909,7 +918,7 @@ Jacob.GZip.prototype.CreateTree = function(currentTree, numval, lengths, show) {
   return 0;
 };
 
-Jacob.GZip.prototype.DecodeValue = function(currentTree) {
+Jacob.Codec.GZip.prototype.DecodeValue = function(currentTree) {
   var len, i,
     xtreepos=0,
     X = currentTree[xtreepos],
@@ -946,7 +955,7 @@ Jacob.GZip.prototype.DecodeValue = function(currentTree) {
   return -1;
 };
 
-Jacob.GZip.prototype.DeflateLoop = function() {
+Jacob.Codec.GZip.prototype.DeflateLoop = function() {
   var last, c, type, i, len;
 
   do {
@@ -1009,7 +1018,7 @@ Jacob.GZip.prototype.DeflateLoop = function() {
 
           Note the bit order!
         */
-        j = (Jacob.GZip.bitReverse[this.readBits(7)]>>1);
+        j = (Jacob.Codec.GZip.bitReverse[this.readBits(7)]>>1);
         if(j > 23) {
           j = (j<<1) | this.readBit();     /* 48..255 */
 
@@ -1035,16 +1044,16 @@ Jacob.GZip.prototype.DeflateLoop = function() {
           var len, dist;
 
           j -= 256 + 1;    /* bytes + EOF */
-          len = this.readBits(Jacob.GZip.cplext[j]) + Jacob.GZip.cplens[j];
+          len = this.readBits(Jacob.Codec.GZip.cplext[j]) + Jacob.Codec.GZip.cplens[j];
 
-          j = Jacob.GZip.bitReverse[this.readBits(5)]>>3;
-          if(Jacob.GZip.cpdext[j] > 8) {
+          j = Jacob.Codec.GZip.bitReverse[this.readBits(5)]>>3;
+          if(Jacob.Codec.GZip.cpdext[j] > 8) {
             dist = this.readBits(8);
-            dist |= (this.readBits(Jacob.GZip.cpdext[j]-8)<<8);
+            dist |= (this.readBits(Jacob.Codec.GZip.cpdext[j]-8)<<8);
           } else {
-            dist = this.readBits(Jacob.GZip.cpdext[j]);
+            dist = this.readBits(Jacob.Codec.GZip.cpdext[j]);
           }
-          dist += Jacob.GZip.cpdist[j];
+          dist += Jacob.Codec.GZip.cpdist[j];
 
           for(j=0;j<len;j++) {
             var c = this.buf32k[(this.bIdx - dist) & 0x7fff];
@@ -1069,10 +1078,10 @@ Jacob.GZip.prototype.DeflateLoop = function() {
       // Get the decode tree code lengths
 
       for(j=0; j<lenCodes; j++) {
-        ll[Jacob.GZip.border[j]] = this.readBits(3);
+        ll[Jacob.Codec.GZip.border[j]] = this.readBits(3);
       }
       len = this.distanceTree.length;
-      for (i=0; i<len; i++) this.distanceTree[i] = new Jacob.GZip.HufNode();
+      for (i=0; i<len; i++) this.distanceTree[i] = new Jacob.Codec.GZip.HufNode();
       if(this.CreateTree(this.distanceTree, 19, ll, 0)) {
         this.flushBuffer();
         return 1;
@@ -1125,13 +1134,13 @@ Jacob.GZip.prototype.DeflateLoop = function() {
       // Can overwrite tree decode tree as it is not used anymore
       len = this.literalTree.length;
       for (i=0; i<len; i++)
-        this.literalTree[i]=new Jacob.GZip.HufNode();
+        this.literalTree[i]=new Jacob.Codec.GZip.HufNode();
       if(this.CreateTree(this.literalTree, literalCodes, ll, 0)) {
         this.flushBuffer();
         return 1;
       }
       len = this.literalTree.length;
-      for (i=0; i<len; i++) this.distanceTree[i]=new Jacob.GZip.HufNode();
+      for (i=0; i<len; i++) this.distanceTree[i]=new Jacob.Codec.GZip.HufNode();
       var ll2 = new Array();
       for (i=literalCodes; i <ll.length; i++) ll2[i-literalCodes]=ll[i];
       if (this.CreateTree(this.distanceTree, distCodes, ll2, 0)) {
@@ -1149,16 +1158,16 @@ Jacob.GZip.prototype.DeflateLoop = function() {
             break;
           }
           j--;
-          len = this.readBits(Jacob.GZip.cplext[j]) + Jacob.GZip.cplens[j];
+          len = this.readBits(Jacob.Codec.GZip.cplext[j]) + Jacob.Codec.GZip.cplens[j];
 
           j = this.DecodeValue(this.distanceTree);
-          if(Jacob.GZip.cpdext[j] > 8) {
+          if(Jacob.Codec.GZip.cpdext[j] > 8) {
             dist = this.readBits(8);
-            dist |= (this.readBits(Jacob.GZip.cpdext[j]-8)<<8);
+            dist |= (this.readBits(Jacob.Codec.GZip.cpdext[j]-8)<<8);
           } else {
-            dist = this.readBits(Jacob.GZip.cpdext[j]);
+            dist = this.readBits(Jacob.Codec.GZip.cpdext[j]);
           }
-          dist += Jacob.GZip.cpdist[j];
+          dist += Jacob.Codec.GZip.cpdist[j];
           while(len--) {
             var c = this.buf32k[(this.bIdx - dist) & 0x7fff];
             this.addBuffer(c);
@@ -1175,7 +1184,7 @@ Jacob.GZip.prototype.DeflateLoop = function() {
   return 0;
 };
 
-Jacob.GZip.prototype.unzipFile = function(name) {
+Jacob.Codec.GZip.prototype.unzipFile = function(name) {
   var i;
   this.gunzip();
   for (i=0;i<this.unzipped.length;i++){
@@ -1185,7 +1194,7 @@ Jacob.GZip.prototype.unzipFile = function(name) {
   }
 };
 
-Jacob.GZip.prototype.nextFile = function(){
+Jacob.Codec.GZip.prototype.nextFile = function(){
   // if (this.debug) alert("NEXTFILE");
 
   this.outputArr = [];
@@ -1263,7 +1272,7 @@ Jacob.GZip.prototype.nextFile = function(){
         var c = this.readByte();
         if (c == "/" | c ==":") {
           i = 0;
-        } else if (i < Jacob.GZip.NAMEMAX-1) {
+        } else if (i < Jacob.Codec.GZip.NAMEMAX-1) {
           this.nameBuf[i++] = String.fromCharCode(c);
         }
       }
@@ -1292,7 +1301,7 @@ Jacob.GZip.prototype.nextFile = function(){
   }
 };
 
-Jacob.GZip.prototype.skipdir = function(){
+Jacob.Codec.GZip.prototype.skipdir = function(){
   var tmp = [];
   var compSize, size, os, i, c;
 
@@ -1356,7 +1365,7 @@ Jacob.GZip.prototype.skipdir = function(){
     while (c=this.readByte()){
       if(c == "7" || c == ":")
         i=0;
-      if (i<Jacob.GZip.NAMEMAX-1)
+      if (i<Jacob.Codec.GZip.NAMEMAX-1)
         this.nameBuf[i++] = c;
     }
     //this.nameBuf[i] = "\0";
@@ -1522,9 +1531,9 @@ Jacob.HTTP.get = function Jacob__HTTP___get(url, options) {
 /**
  *    new Jacob.I18n([locale])
  *    - locale (String): A locale-string, e.g. "de" or "de-CH". As default the
- *      following values are tried in order: Jacob.I18n.defaultLocale, the
- *      xml:lang attribute of the html tag, the lang attribute in the html tag,
- *      'generic'
+ *      following values are tried in order: the xml:lang attribute of the
+ *      <html> tag, the lang attribute of the <html> tag,
+ *      Jacob.I18n.defaultLocale, 'generic'.
  *
  *    ## Summary
  *
@@ -1537,23 +1546,25 @@ Jacob.HTTP.get = function Jacob__HTTP___get(url, options) {
  *        var i18n = new Jacob.I18n();
  **/
 Jacob.I18n = function Jacob__I18n(locale) {
-  this._translators  = {};
-  this._translations = {};
-  var htmlTag        = document.getElementsByTagName("html")[0]
+  this._translators   = {};
+  this._translations  = {};
+  this._loadedLocales = {};
+  var htmlTag         = document.getElementsByTagName("html")[0]
 
-  if (!locale) locale = this.constructor.defaultLocale;
-  if (!locale) locale = htmlTag.getAttribute('xml:lang');
-  if (!locale) locale = htmlTag.getAttribute('lang');
-  if (!locale) locale = 'generic';
+  locale = locale ||
+           htmlTag.getAttribute('xml:lang') ||
+           htmlTag.getAttribute('lang') ||
+           this.constructor.defaultLocale ||
+           'generic';
 
-  this.locale(locale || this.constructor.defaultLocale);
+  this.locale(locale);
   this.scope('/');
   this.loadLocale(Jacob.I18n.builtIn);
 };
 
 
-/**
- *    Jacob.I18n.t([options]) -> Function
+/** section: translate, related to: Jacob.I18n#translate
+ *    Jacob.I18n#t([options]) -> Function
  *    - options (Object): An options hash, which is passed on to
  *      Jacob.I18n#translate after merging it with the
  *
@@ -1581,7 +1592,7 @@ Jacob.I18n.prototype.t = function Jacob__I18n___t() {
 };
 
 
-/**
+/** section: localize, related to: Jacob.I18n#localize
  *    Jacob.I18n#l([options]) -> Function
  *    - options (Object): An options-hash. See Options.
  *
@@ -1805,7 +1816,7 @@ Jacob.I18n.prototype.hasKey    = function Jacob__I18n___hasKey(key, options) {
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
+ *        i18n.interpolateKey('%{which}/key', {kind: 'any'}, '/base');
  *        // => "/base/any/key"
  *
  **/
@@ -1827,28 +1838,26 @@ Jacob.I18n.prototype.hasKey    = function Jacob__I18n___hasKey(key, options) {
 };
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
+/**
+ *    Jacob.I18n#normalizeKey(key, options) -> key (String)
+ *    - key (String): The key to normalize, possibly containing variables and
  *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+ *    - options (Object): The same options hash as Jacob#I18n#translate takes.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Returns a normalized key, applying all options like segments, scope and
+ *    count, regardless of whether that key actually can be found in an actual
+ *    lookup.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.normalizeKey('%{which}/key', {segments: {kind: 'any'}, count: 2, scope: '/base'});
+ *        // => "/base/any/key/more"
  *
  **/
-Jacob.I18n.prototype.normalizeKey = function (key, options) {
+Jacob.I18n.prototype.normalizeKey = function Jacob__I18n___normalizeKey(key, options) {
   if (options.count !== undefined) {
     key = key+'/'+this.localize(options.count, {translator: 'GrammarNumerus'});;
     if (options.variables) {
@@ -1861,25 +1870,30 @@ Jacob.I18n.prototype.normalizeKey = function (key, options) {
 }
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+/**
+ *    Jacob.I18n#translate(key[, options={}]) -> translation (String) | undefined
+ *    - key (String): The key to translate
+ *    - options (Object): An options hash. See Options.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Translates the given key and applies all given options.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.translate('/key'); // "Translation"
+ *
+ *
+ *    ## Options
+ *
+ *    * segments (Object): A hash of variables that the key is interpolated with
+ *    * variables (Object): A hash of variable that the translation is interpolated with
+ *    * count (Integer): Used for pluralization, also available as a variable
+ *    * scope (String): The scope which a relative key should be prefixed with
+ *    * fallback (Object): The value to return in case the key could not be found
+ *    * lazyLoader (Function): Invoked after a failed lookup, expected to return
+ *      ['retry'], ['use', translation], ['default'] or undefined (which is treated as ['retry'])
  *
  **/
 Jacob.I18n.prototype.translate = function Jacob__I18n___translate(key, options) {
@@ -1888,6 +1902,16 @@ Jacob.I18n.prototype.translate = function Jacob__I18n___translate(key, options) 
 
   key         = this.normalizeKey(key, options);
   translation = this.lookup(this._translations, this._cascadedLocales, key)
+  if (!translation && options.lazyLoader) {
+    var action = options.lazyLoader.apply(this, [key, options]) || ['retry'];
+    if (action[0] == 'retry') {
+      translation = this.lookup(this._translations, this._cascadedLocales, key)
+    } else if (action[0] == 'use') {
+      translation = action[1];
+    } else if (action[0] != 'default') {
+      throw("Invalid return value from lazy loader: '"+action[0]+"', expected retry, use or default")
+    }
+  }
   if (!translation) translation = (typeof(options.fallback) == 'function' ? options.fallback() : options.fallback);
   if (translation && options.variables) translation = Jacob.Template.interpolate(translation, undefined, options.variables);
 
@@ -1895,25 +1919,19 @@ Jacob.I18n.prototype.translate = function Jacob__I18n___translate(key, options) 
 };
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+/**
+ *    Jacob.I18n#localize(object[, options]) -> translation (Object) | undefined
+ *    - object (Object): The value to localize, e.g. a Date or Number.
+ *    - options (Object): A hash with options that indicate how to localize the object.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Localizes arbitrary objects.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.localize(new Date()); // => "Saturday, 23. September"
  *
  **/
 Jacob.I18n.prototype.localize = function Jacob__I18n___localize(value, options) {
@@ -1926,63 +1944,85 @@ Jacob.I18n.prototype.localize = function Jacob__I18n___localize(value, options) 
 
 
 /* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+ *    Jacob.I18n#load(localeURI[, ignoreCache=false][, onLoadCallback]) -> undefined
+ *    - localeURI (String): The URI of the locale to load.
+ *    - onLoadCallback (Function): A callback that is invoked after loading the locale.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Loads a locale file and adds its contents to this Jacob.I18n instance.
+ *    You may want to take a look at Jacob.Barrier as a help when you want to
+ *    load multiple locale files.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.load("/locales/en-GB.js", function() {
+ *          i18n.translate("/some/key");
+ *        });
  *
  **/
-Jacob.I18n.prototype.load = function Jacob__I18n___load(locale, callback) {
-  var locale = locale || this._locale;
-  var i18n   = this;
-  var uri    = (locale.match(/^\w+:\/\/|^\/|.js$|.json$/) ? locale : 'locales/'+locale+'.js');
-  Jacob.HTTP.get(uri, {
-    success: function(data) {
-      if (data) {
-        i18n.loadLocale(Jacob.JSON.parse(data));
-        if (callback) callback();
+Jacob.I18n.prototype.load = function Jacob__I18n___load(uri, ignoreCache, callback) {
+  var i18n   = this; // for the closures
+  if (typeof(ignoreCache) == 'function') {
+    callback    = ignoreCache;
+    ignoreCache = undefined;
+  }
+
+  if (!ignoreCache && i18n._loadedLocales[uri]) {
+    if (callback) callback();
+  } else {
+    Jacob.HTTP.get(uri, {
+      success: function(data) {
+        i18n._loadedLocales[uri] = true;
+        if (data) {
+          i18n.loadLocale(Jacob.JSON.parse(data));
+          if (callback) callback();
+        }
+      },
+      error: function() {
+        throw("Failed to load '"+uri+"'");
       }
-    },
-    error: function() {
-      throw("Failed to load '"+uri+"'");
-    }
-  });
+    });
+  }
 };
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+/**
+ *    Jacob.I18n#loadLocale(data) -> undefined
+ *    - data (Object): A locale datastructure.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Adds the data in the data argument to this Jacob.I18n instance.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.loadLocale({locale: "en-GB", translations: {"/key": "value"}});
+ *
+ *
+ *    ## Datastructure
+ *
+ *    The structure of the file should look like this:
+ *        {
+ *          "locale": "en-GB", // the locale of this data
+ *          "translators": { // custom translators for #localize
+ *            "Constructorname": {
+ *              "localize": function(value, options)
+ *            }
+ *          }
+ *          "translations": {  // translations for #translate
+ *            "arbitrarily": {
+ *              "deep": {
+ *                "nesting": "Can be done"
+ *              }
+ *            }
+ *          }
+ *        }
+ *    Notice that the nesting of the hash under "translations" can be arbitrarily
+ *    deep. The example is equivalent to {"/arbitrarily/deep/nesting": "Can be done"}.
+ *    Localization functions are executed in the context of this Jacob.I18n instance.
  *
  **/
 Jacob.I18n.prototype.loadLocale = function Jacob__I18n___loadLocale(data) {
@@ -1991,25 +2031,20 @@ Jacob.I18n.prototype.loadLocale = function Jacob__I18n___loadLocale(data) {
 };
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+/**
+ *    Jacob.I18n#addTranslators(locale, translators) -> true
+ *    - locale (String): The locale to add the translators to.
+ *    - translators (Object): The translators.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Adds translators to the given locale of this instance of Jacob.I18n.
+ *    For the structure of the translators argument, see Jacob.I18n#loadLocale.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.addTranslators('en-GB', {Currency: {localize: enGBCurrencyLocalizer}});
  *
  **/
 Jacob.I18n.prototype.addTranslators = function Jacob__I18n___addTranslators(locale, translators) {
@@ -2023,25 +2058,20 @@ Jacob.I18n.prototype.addTranslators = function Jacob__I18n___addTranslators(loca
 };
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+/**
+ *    Jacob.I18n#addTranslations(locale, translations) -> true
+ *    - locale (String): The locale to add the translations to.
+ *    - translators (Object): The translations.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Adds translations to the given locale of this instance of Jacob.I18n.
+ *    For the structure of the translators argument, see Jacob.I18n#loadLocale.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.addTranslations('en-GB', {"localizers.Currency.format": "%{amount} %{currency}"});
  *
  **/
 Jacob.I18n.prototype.addTranslations = function Jacob__I18n___addTranslations(locale, translations) {
@@ -2056,25 +2086,103 @@ Jacob.I18n.prototype.addTranslations = function Jacob__I18n___addTranslations(lo
 };
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+/**
+ *    Jacob.I18n#prepareNodeForAutomaticTranslation([node=document.body]) -> undefined
+ *    - node (DOMElement): The root node to start translating from.
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
+ *    Gets all textnodes and adds them as key and value for the defaultLocale.
  *
  *
  *    ## Synopsis
  *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *        i18n.prepareNodeForAutomaticTranslation();
+ *
+ *
+ *    ## Warning
+ *
+ *    This function is experimental.
+ *
+ **/
+Jacob.I18n.prototype.inferTranslationsFromNode = function Jacob__I18n___prepareNodeForAutomaticTranslation(node) {
+  node = node || document.body;
+  var locale       = Jacob.I18n.defaultLocale;
+  var found        = [];
+  var translations = {};
+  var textnodesFinder = function(node, found) {
+    if (node.nodeType == 3 && !node.data.match(/^[ \t\n\r\f\v\s]*$/)) found.push(node);
+    for(var i=0; i<node.childNodes.length; i++) textnodesFinder(node.childNodes[i], found);
+  }
+  textnodesFinder(node, found);
+  for(var i=0; i<found.length; i++) {
+    var node   = found[i];
+    var parent = node.parentNode;
+    var text   = parent.innerText.replace(/^[\s\r\n]*|[\s\r\n]*$/g, ''); // strip
+    translations[text] = text;
+    parent.setAttribute("data-i18nKey", text);
+  }
+  this.addTranslations(locale, translations);
+};
+
+
+/**
+ *    Jacob.I18n#translateNode([node=document.body][, loadLocaleCallback]) -> undefined
+ *    - node (DOMElement): The root node to start translating from.
+ *    - loadLocaleCallback (Function): A callback that is invoked if a translation can't be found.
+ *
+ *    ## Summary
+ *
+ *    Translates a DOM node and all its descendants. It starts with the current
+ *    locale but respects any given 'lang' attribute on any of the nodes.
+ *
+ *
+ *    ## Synopsis
+ *
+ *        i18n.translateNode();
+ *
+ *
+ *    ## Warning
+ *
+ *    This function is experimental.
+ *
+ **/
+Jacob.I18n.prototype.translateNode = function Jacob__I18n___translateNode(node, loadLocaleCallback) {
+  if (typeof(node) == 'function') {
+    loadLocaleCallback = node;
+    node               = undefined;
+  }
+  node = node || document.body;
+
+  var found           = [];
+  var textnodesFinder = function(node, found) {
+    if (node.nodeType == 3 && !node.data.match(/^[ \t\n\r\f\v\s]*$/)) found.push(node);
+    for(var i=0; i<node.childNodes.length; i++) textnodesFinder(node.childNodes[i], found);
+  }
+  textnodesFinder(node, found);
+  for(var i=0; i<found.length; i++) {
+    var node         = found[i];
+    var parent       = node.parentNode;
+    var i18nKey      = parent.getAttribute('data-i18nKey');
+    var translation  = this.translate(i18nKey, {lazyLoader: loadLocaleCallback, fallback: i18nKey});
+    parent.innerText = translation;
+  }
+};
+
+
+/* INTERNAL
+ *    Jacob.I18n#flattenLocales(hash) -> flatLocales (Object)
+ *    - hash (Object): The deeply nested translations hash to flatten.
+ *
+ *    ## Summary
+ *
+ *    Flattens the arbitrarily deep translations hash into a flat key-value hash.
+ *
+ *
+ *    ## Synopsis
+ *
+ *        i18n.flattenLocales({"deeply": {"nested": "locales"}});
+ *        // => {"/deeply/nested": "locales"}
  *
  **/
 Jacob.I18n.prototype.flattenLocales = function Jacob__I18n___flattenLocales(hash, stack, flattened) {
@@ -2118,25 +2226,13 @@ Jacob.I18n.prototype.flattenLocales = function Jacob__I18n___flattenLocales(hash
 Jacob.I18n.defaultLocale = null;
 
 
-/* INTERNAL
- *    Jacob.I18n#interpolateKey(key[, variables={}[, scope=this.scope()]]) -> key (String)
- *    - key (String): The key to interpolate, possibly containing variables and
- *      being relative.
- *    - variables (Object): A hash with variables to interpolate in the key.
- *      Superfluous variables are silently ignored.
- *    - scope (String): The scope to prefix relative keys with.
- *      See Jacob.I18n#scope.
+/**
+ *    Jacob.I18n.builtIn = localeData
  *
  *    ## Summary
  *
- *    Returns a completly interpolated key, regardless of whether that key actually
- *    can be found in an actual lookup.
- *
- *
- *    ## Synopsis
- *
- *        i18n.interpolate('%{which}/key', {kind: 'any'}, '/base');
- *        // => "/base/any/key"
+ *    The preloaded locale data for the 'generic' locale which is always looked
+ *    up last. It defines a couple of standard localizers.
  *
  **/
 Jacob.I18n.builtIn = {
@@ -2534,7 +2630,6 @@ Jacob.I18n.Datetime.mapping = {
  *  ## Synopsis
  *
  *      Jacob.JSON.parse(string) -> Object
- *      Jacob.JSON.dump(object)  -> String
  *
  *
  *  ## External Dependencies
@@ -2546,7 +2641,36 @@ Jacob.I18n.Datetime.mapping = {
 
 Jacob.JSON = {name: 'Jacob__JSON'};
 
-Jacob.JSON.parse = jQuery.parseJSON;
+
+/**
+ *  Jacob.JSON.parse(string) -> deserialized (Object)
+ *
+ *  ## Summary
+ *
+ *    Parse JSON Strings and convert it to the corresponding object.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.JSON.parse('{"a": 1}'); // => {a: 1}
+ **/
+Jacob.JSON.parse = function() {
+  return jQuery.parseJSON.apply(jQuery, arguments);
+}
+
+
+/* UNIMPLEMENTED
+ *  Jacob.JSON.dump(object) -> serialized (String)
+ *
+ *  ## Summary
+ *
+ *    Serialize objects to JSON Strings.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.JSON.dump({a: 1}); // => "{\"a\": 1}"
+ **/
 Jacob.JSON.dump  = function Jacob__JSON__dump() {
   throw("Not yet implemented");
 };
@@ -2593,13 +2717,89 @@ Jacob.Template = function Jacob__Template(templateString, options) {
 }
 
 
-Jacob.Template.MissingKeyHandler = function Jacob__Template__MissingKeyHandler(template, missingKey, options, variables) {
-  var givenKeys = [];
-  for(var key in variables) givenKeys.push(key);
-  throw("Missing key '"+missingKey+"', given: '"+givenKeys.join("', '")+"'");
+/**
+ *    class Jacob.Template.KeyError
+ *
+ *    ## Summary
+ *
+ *    Useful for custom missing and superfluous key handlers.
+ *    It automatically calculates missing keys, superfluous keys, expected keys
+ *    and given keys.
+ *
+ **/
+
+/**
+ *    Jacob.Template.KeyError#template -> template (Jacob.Template)
+ **/
+
+/**
+ *    Jacob.Template.KeyError#expectedKeys -> expectedKeys (Array)
+ **/
+
+/**
+ *    Jacob.Template.KeyError#givenKeys -> givenKeys (Array)
+ **/
+
+/**
+ *    Jacob.Template.KeyError#missingKeys -> missingKeys (Array)
+ **/
+
+/**
+ *    Jacob.Template.KeyError#superfluousKeys -> superfluousKeys (Array)
+ **/
+
+/**
+ *    new Jacob.Template.KeyError(template, variables[, message])
+ **/
+Jacob.Template.KeyError = function Jacob__Template__KeyError(template, variables, message) {
+  this.template        = template;
+  this.expectedKeys    = template.identifiers();
+  this.givenKeys       = Jacob.Util.ownPropertyNames(variables);
+  this.missingKeys     = Jacob.Util.arraySubtract(this.expectedKeys, this.givenKeys);
+  this.superfluousKeys = Jacob.Util.arraySubtract(this.givenKeys, this.expectedKeys);
+
+  if (!message) {
+    if (this.missingKeys > 0) {
+      var given   = "'"+this.givenKeys.join("', '")+"'";
+      var missing = "'"+this.missingKeys.join("', '")+"'";
+      this.message = "Missing keys "+missing+", given: "+given;
+    } else if (this.superfluousKeys.length > 0) {
+      var expected    = "'"+this.expectedKeys.join("', '")+"'";
+      var superfluous = "'"+this.superfluousKeys.join("', '")+"'";
+      this.message = "Superfluous keys "+superfluous+", expected: "+expected;
+    } else {
+      this.message = "Key error"
+    }
+  }
 }
+
+
+/**
+ *    Jacob.Template.MissingKeyHandler = (Function)
+ *
+ *    ## Summary
+ *
+ *    MissingKeyHandler is the default callback for missing keys.
+ *    It throws an error.
+ *
+ **/
+Jacob.Template.MissingKeyHandler = function Jacob__Template__MissingKeyHandler(template, missingKey, options, variables) {
+  throw(new Jacob.Template.KeyError(template, variables));
+}
+
+
+/**
+ *    Jacob.Template.SuperfluousKeysHandler = (Function)
+ *
+ *    ## Summary
+ *
+ *    SuperfluousKeysHandler is a callback for superfluous keys. The default is
+ *    none, though.
+ *    SuperfluousKeysHandler throws an error.
+ *
+ **/
 Jacob.Template.SuperfluousKeysHandler = function Jacob__Template__MissingKeyHandler(template, superfluousKeys, options, variables) {
-  throw("Superfluous keys '"+superfluousKeys.join("', '")+"'");
+  throw(new Jacob.Template.KeyError(template, variables));
 }
 
 
@@ -2608,6 +2808,18 @@ Jacob.Template.SuperfluousKeysHandler = function Jacob__Template__MissingKeyHand
  *  - templateString (String): The template string to interpolate the variables into.
  *  - options (Object):        Same options as the Jacob.Template constructor accepts.
  *  - variables (Object):      The variables to interpolate into the template.
+ *
+ *  ## Summary
+ *
+ *  This function is a shortcut for:
+ *      (new Jacob.Template(templateString, option)).interpolate(variables);
+ *  In consequence it can throw all the same errors as Jacob.Template#interpolate.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.Template.interpolate("%{predicate} %{subject}", {}, {predicate: "Hello", subject: "World"});
+ *      // => "Hello World"
  **/
 Jacob.Template.interpolate = function Jacob__Template__interpolate(templateString, options, variables) {
   if (arguments.length == 2) {
@@ -2619,6 +2831,20 @@ Jacob.Template.interpolate = function Jacob__Template__interpolate(templateStrin
   return template.interpolate(variables);
 };
 
+
+/** 
+ *  Jacob.Template#identifiers() -> identifiers (Array)
+ *
+ *  ## Summary
+ *
+ *  Returns all identifiers which can be replaced by variables.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      var template = new Jacob.Template("%{predicate} %{subject}");
+ *      template.identifiers() // => ["predicate", "subject"]
+ **/
 Jacob.Template.prototype.identifiers = function Jacob_Template___identifiers() {
   var identifiers = this._templateString.match(/%\{\w+\}/g);
   var i           = identifiers.length;
@@ -2626,6 +2852,31 @@ Jacob.Template.prototype.identifiers = function Jacob_Template___identifiers() {
 
   return identifiers;
 }
+
+
+
+
+/** 
+ *  Jacob.Template#interpolate(variables) -> interpolated (String)
+ *
+ *  ## Summary
+ *
+ *  Returns the template string with all identifiers replaced by the
+ *  values of the given variables.
+ *
+ *  Depending on the options, this function can throw errors on missing- and
+ *  superfluous keys. The default is to ignore superfluous keys but throw a
+ *  Jacob.Template.KeyError on missing keys.
+ *
+ *  Also see: Jacob.Template.MissingKeyHandler and Jacob.Template.SuperfluousKeyHandler
+ *
+ *
+ *  ## Synopsis
+ *
+ *      var template = new Jacob.Template("%{predicate} %{subject}");
+ *      template.interpolate({predicate: "Hello", subject: "World"});
+ *      // => "Hello World"
+ **/
 Jacob.Template.prototype.interpolate = function Jacob_Template___interpolate(variables, options) {
   var self            = this; // for the various closures
   options             = options || {};
@@ -2677,8 +2928,18 @@ Jacob.Util = {};
  *  Copies an object, copying all its properties. The copy is shallow.
  **/
 Jacob.Util.clone  = function Jacob__Util__clone(source) {
-  return Jacob.Util.extend({}, source);
+  switch(typeof(source)) {
+    case "object":
+      return Jacob.Util.extend({}, source);
+    case "array":
+    case "string":
+      return source.slice();
+    case "number":
+    default:
+      return source;
+  }
 }
+
 
 /** 
  *  Jacob.Util.extend(target, source) -> Object
@@ -2707,5 +2968,59 @@ Jacob.Util.extend = function Jacob__Util__extend(target, source) {
   }
 
   return target;
+}
+
+
+/** 
+ *  Jacob.Util.ownPropertyNames(object) -> Object
+ *  - object (Object): The object from which to get the property names.
+ *
+ *  ## Summary
+ *
+ *  Returns all property names that belong to the given object only
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.Util.ownPropertyNames({a: 1, b: 2}) -> ['a', 'b']
+ *
+ **/
+Jacob.Util.ownPropertyNames = function Jacob__Util__ownPropertyNames(object) {
+  var names=[];
+  for(propertyName in object) {
+    if (object.hasOwnProperty(propertyName)) names.push(propertyName);
+  }
+
+  return names;
+}
+
+
+/** 
+ *  Jacob.Util.arraySubtract(arrayA, arrayB) -> diff (Array)
+ *  - arrayA (Array): The minuend.
+ *  - arrayB (Array): The subtrahend.
+ *
+ *  ## Summary
+ *
+ *  Returns all values of ArrayA that are not in ArrayB.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.Util.ownPropertyNames([1, 2, 3], [3, 4, 5]) -> ["1"]
+ *
+ *
+ *  ## Warning
+ *
+ *  Since this function uses an object as a hash to perform the subtraction,
+ *  all keys are treated as strings.
+ *
+ **/
+Jacob.Util.arraySubtract = function Jacob__Util__arraySubtract(arrayA, arrayB) {
+  var diffSet={}
+  for(var i=0; i < arrayA.length; i++) diffSet[arrayA[i]] = true;
+  for(var i=0; i < arrayB.length; i++) delete diffSet[arrayB[i]];
+
+  return Jacob.Util.ownPropertyNames(diffSet);
 }
 })();

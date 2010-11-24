@@ -1,7 +1,7 @@
 ---
 id: "Jacob"
 type: namespace
-line_number: 89
+line_number: 98
 description: |
   JACOB
   =====
@@ -84,7 +84,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier"
 parent_id: "Jacob"
 type: class
-line_number: 123
+line_number: 132
 description: |
   ## Summary
   
@@ -117,7 +117,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.Barrier"
 parent_id: "Jacob.Barrier"
 type: constructor
-line_number: 133
+line_number: 142
 description: |
   ## Summary
   
@@ -132,7 +132,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#wait"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 159
+line_number: 168
 description: |
   ## Summary
   
@@ -162,7 +162,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#block"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 186
+line_number: 195
 description: |
   ## Summary
   
@@ -192,7 +192,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#clear"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 236
+line_number: 245
 description: |
   ## Summary
   
@@ -224,7 +224,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#release"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 284
+line_number: 293
 description: |
   ## Summary
   
@@ -255,7 +255,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec"
 parent_id: "Jacob"
 type: mixin
-line_number: 307
+line_number: 316
 description: |
   ## Summary
   
@@ -274,7 +274,8 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.GZipDecode"
 parent_id: "Jacob.Codec"
 type: class method
-line_number: 324
+line_number: 333
+alias_of: "Jacob.Codec.GZip.gunzip"
 description: |
   ## Summary
   
@@ -296,7 +297,8 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.base64Encode"
 parent_id: "Jacob.Codec"
 type: class method
-line_number: 340
+line_number: 349
+alias_of: "Jacob.Codec.Base64.encode"
 description: |
   ## Summary
   
@@ -318,7 +320,8 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.base64Decode"
 parent_id: "Jacob.Codec"
 type: class method
-line_number: 356
+line_number: 365
+alias_of: "Jacob.Codec.Base64.decode"
 description: |
   ## Summary
   
@@ -340,7 +343,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64"
 parent_id: "Jacob.Codec"
 type: mixin
-line_number: 381
+line_number: 390
 description: |
   ## Summary
   
@@ -365,7 +368,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64.encode"
 parent_id: "Jacob.Codec.Base64"
 type: class method
-line_number: 404
+line_number: 413
 description: |
   ## Summary
   
@@ -393,7 +396,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64.decode"
 parent_id: "Jacob.Codec.Base64"
 type: class method
-line_number: 450
+line_number: 459
 description: |
   ## Summary
   
@@ -427,7 +430,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64._decodeAsArray"
 parent_id: "Jacob.Codec.Base64"
 type: class method
-line_number: 504
+line_number: 513
 description: |
   ## Summary
   
@@ -455,10 +458,10 @@ arguments:
 file: javascripts/jacob-dev.js
 
 ---
-id: "Jacob.GZip"
-parent_id: "Jacob"
+id: "Jacob.Codec.GZip"
+parent_id: "Jacob.Codec"
 type: class
-line_number: 657
+line_number: 666
 description: |
   ## Summary
   
@@ -467,7 +470,7 @@ description: |
   
   ## Synopsis
   
-      Jacob.GZip.gunzip(string) // => String
+      Jacob.Codec.GZip.gunzip(string) // => String
   
   
   ## ToDo
@@ -477,18 +480,18 @@ description: |
 file: javascripts/jacob-dev.js
 
 ---
-id: "new Jacob.GZip"
-parent_id: "Jacob.GZip"
+id: "new Jacob.Codec.GZip"
+parent_id: "Jacob.Codec.GZip"
 type: constructor
-line_number: 668
+line_number: 677
 description: |
   ## Summary
   
-  See Jacob.GZip.gunzip.
+  See Jacob.Codec.GZip.gunzip.
 
 signatures:
  -
-  signature: "new Jacob.GZip()"
+  signature: "new Jacob.Codec.GZip()"
 arguments:
  -
   name: data
@@ -499,10 +502,10 @@ arguments:
 file: javascripts/jacob-dev.js
 
 ---
-id: "Jacob.GZip.gunzip"
-parent_id: "Jacob.GZip"
+id: "Jacob.Codec.GZip.gunzip"
+parent_id: "Jacob.Codec.GZip"
 type: class method
-line_number: 704
+line_number: 713
 description: |
   ## Summary
   
@@ -510,7 +513,7 @@ description: |
 
 signatures:
  -
-  signature: "Jacob.GZip.gunzip(data)"
+  signature: "Jacob.Codec.GZip.gunzip(data)"
   return_value: "String"
 arguments:
  -
@@ -525,7 +528,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.HTTP"
 parent_id: "Jacob"
 type: class
-line_number: 1414
+line_number: 1423
 description: |
   ## Summary
   
@@ -549,7 +552,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.HTTP.get"
 parent_id: "Jacob.HTTP"
 type: class method
-line_number: 1441
+line_number: 1450
 description: |
   ## Summary
   
@@ -589,7 +592,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n"
 parent_id: "Jacob"
 type: class
-line_number: 1519
+line_number: 1528
 description: |
   ## Summary
   
@@ -663,7 +666,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.I18n"
 parent_id: "Jacob.I18n"
 type: constructor
-line_number: 1539
+line_number: 1548
 description: |
   ## Summary
   
@@ -683,15 +686,16 @@ arguments:
   name: locale
   types: [String]
   description: >
-    A locale-string, e.g. "de" or "de-CH". As default the following values are tried in order: Jacob.I18n.defaultLocale, the xml:lang attribute of the html tag, the lang attribute in the html tag, 'generic'
+    A locale-string, e.g. "de" or "de-CH". As default the following values are tried in order: the xml:lang attribute of the <html> tag, the lang attribute of the <html> tag, Jacob.I18n.defaultLocale, 'generic'.
 
 file: javascripts/jacob-dev.js
 
 ---
-id: "Jacob.I18n.t"
+id: "Jacob.I18n#t"
 parent_id: "Jacob.I18n"
-type: class method
-line_number: 1576
+type: instance method
+line_number: 1587
+related_to: "Jacob.I18n#translate"
 description: |
   ## Summary
   
@@ -710,7 +714,7 @@ description: |
 
 signatures:
  -
-  signature: "Jacob.I18n.t([options])"
+  signature: "Jacob.I18n#t([options])"
   return_value: "Function"
 arguments:
  -
@@ -725,7 +729,8 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#l"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1603
+line_number: 1614
+related_to: "Jacob.I18n#localize"
 description: |
   ## Summary
   
@@ -758,7 +763,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#cascadeLocales"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1634
+line_number: 1645
 description: |
   ## Summary
   
@@ -793,7 +798,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#locale"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1663
+line_number: 1674
 description: |
   ## Summary
   
@@ -825,7 +830,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#scope"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1704
+line_number: 1715
 description: |
   ## Summary
   
@@ -871,7 +876,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#translations"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1730
+line_number: 1741
 description: |
   ## Summary
   
@@ -895,7 +900,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#hasKey"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1779
+line_number: 1790
 description: |
   ## Summary
   
@@ -925,10 +930,333 @@ arguments:
 file: javascripts/jacob-dev.js
 
 ---
+id: "Jacob.I18n#normalizeKey"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 1860
+description: |
+  ## Summary
+  
+  Returns a normalized key, applying all options like segments, scope and
+  count, regardless of whether that key actually can be found in an actual
+  lookup.
+  
+  
+  ## Synopsis
+  
+      i18n.normalizeKey('%{which}/key', {segments: {kind: 'any'}, count: 2, scope: '/base'});
+      // => "/base/any/key/more"
+
+signatures:
+ -
+  signature: "Jacob.I18n#normalizeKey(key, options)"
+  return_value: "key (String)"
+arguments:
+ -
+  name: key
+  types: [String]
+  description: >
+    The key to normalize, possibly containing variables and being relative.
+
+ -
+  name: options
+  types: [Object]
+  description: >
+    The same options hash as Jacob#I18n#translate takes.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n#translate"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 1899
+description: |
+  ## Summary
+  
+  Translates the given key and applies all given options.
+  
+  
+  ## Synopsis
+  
+      i18n.translate('/key'); // "Translation"
+  
+  
+  ## Options
+  
+  * segments (Object): A hash of variables that the key is interpolated with
+  * variables (Object): A hash of variable that the translation is interpolated with
+  * count (Integer): Used for pluralization, also available as a variable
+  * scope (String): The scope which a relative key should be prefixed with
+  * fallback (Object): The value to return in case the key could not be found
+  * lazyLoader (Function): Invoked after a failed lookup, expected to return
+    ['retry'], ['use', translation], ['default'] or undefined (which is treated as ['retry'])
+
+signatures:
+ -
+  signature: "Jacob.I18n#translate(key[, options={}])"
+  return_value: "translation (String) | undefined"
+arguments:
+ -
+  name: key
+  types: [String]
+  description: >
+    The key to translate
+
+ -
+  name: options
+  types: [Object]
+  description: >
+    An options hash. See Options.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n#localize"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 1937
+description: |
+  ## Summary
+  
+  Localizes arbitrary objects.
+  
+  
+  ## Synopsis
+  
+      i18n.localize(new Date()); // => "Saturday, 23. September"
+
+signatures:
+ -
+  signature: "Jacob.I18n#localize(object[, options])"
+  return_value: "translation (Object) | undefined"
+arguments:
+ -
+  name: object
+  types: [Object]
+  description: >
+    The value to localize, e.g. a Date or Number.
+
+ -
+  name: options
+  types: [Object]
+  description: >
+    A hash with options that indicate how to localize the object.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n#loadLocale"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 2028
+description: |
+  ## Summary
+  
+  Adds the data in the data argument to this Jacob.I18n instance.
+  
+  
+  ## Synopsis
+  
+      i18n.loadLocale({locale: "en-GB", translations: {"/key": "value"}});
+  
+  
+  ## Datastructure
+  
+  The structure of the file should look like this:
+      {
+        "locale": "en-GB", // the locale of this data
+        "translators": { // custom translators for #localize
+          "Constructorname": {
+            "localize": function(value, options)
+          }
+        }
+        "translations": {  // translations for #translate
+          "arbitrarily": {
+            "deep": {
+              "nesting": "Can be done"
+            }
+          }
+        }
+      }
+  Notice that the nesting of the hash under "translations" can be arbitrarily
+  deep. The example is equivalent to {"/arbitrarily/deep/nesting": "Can be done"}.
+  Localization functions are executed in the context of this Jacob.I18n instance.
+
+signatures:
+ -
+  signature: "Jacob.I18n#loadLocale(data)"
+  return_value: "undefined"
+arguments:
+ -
+  name: data
+  types: [Object]
+  description: >
+    A locale datastructure.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n#addTranslators"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 2050
+description: |
+  ## Summary
+  
+  Adds translators to the given locale of this instance of Jacob.I18n.
+  For the structure of the translators argument, see Jacob.I18n#loadLocale.
+  
+  
+  ## Synopsis
+  
+      i18n.addTranslators('en-GB', {Currency: {localize: enGBCurrencyLocalizer}});
+
+signatures:
+ -
+  signature: "Jacob.I18n#addTranslators(locale, translators)"
+  return_value: "true"
+arguments:
+ -
+  name: locale
+  types: [String]
+  description: >
+    The locale to add the translators to.
+
+ -
+  name: translators
+  types: [Object]
+  description: >
+    The translators.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n#addTranslations"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 2077
+description: |
+  ## Summary
+  
+  Adds translations to the given locale of this instance of Jacob.I18n.
+  For the structure of the translators argument, see Jacob.I18n#loadLocale.
+  
+  
+  ## Synopsis
+  
+      i18n.addTranslations('en-GB', {"localizers.Currency.format": "%{amount} %{currency}"});
+
+signatures:
+ -
+  signature: "Jacob.I18n#addTranslations(locale, translations)"
+  return_value: "true"
+arguments:
+ -
+  name: locale
+  types: [String]
+  description: >
+    The locale to add the translations to.
+
+ -
+  name: translators
+  types: [Object]
+  description: >
+    The translations.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n#prepareNodeForAutomaticTranslation"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 2108
+description: |
+  ## Summary
+  
+  Gets all textnodes and adds them as key and value for the defaultLocale.
+  
+  
+  ## Synopsis
+  
+      i18n.prepareNodeForAutomaticTranslation();
+  
+  
+  ## Warning
+  
+  This function is experimental.
+
+signatures:
+ -
+  signature: "Jacob.I18n#prepareNodeForAutomaticTranslation([node=document.body])"
+  return_value: "undefined"
+arguments:
+ -
+  name: node
+  types: [DOMElement]
+  description: >
+    The root node to start translating from.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n#translateNode"
+parent_id: "Jacob.I18n"
+type: instance method
+line_number: 2150
+description: |
+  ## Summary
+  
+  Translates a DOM node and all its descendants. It starts with the current
+  locale but respects any given 'lang' attribute on any of the nodes.
+  
+  
+  ## Synopsis
+  
+      i18n.translateNode();
+  
+  
+  ## Warning
+  
+  This function is experimental.
+
+signatures:
+ -
+  signature: "Jacob.I18n#translateNode([node=document.body][, loadLocaleCallback])"
+  return_value: "undefined"
+arguments:
+ -
+  name: node
+  types: [DOMElement]
+  description: >
+    The root node to start translating from.
+
+ -
+  name: loadLocaleCallback
+  types: [Function]
+  description: >
+    A callback that is invoked if a translation can't be found.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.I18n.builtIn"
+parent_id: "Jacob.I18n"
+type: constant
+line_number: 2238
+description: |
+  ## Summary
+  
+  The preloaded locale data for the 'generic' locale which is always looked
+  up last. It defines a couple of standard localizers.
+
+file: javascripts/jacob-dev.js
+
+---
 id: "Jacob.JSON"
 parent_id: "Jacob"
 type: mixin
-line_number: 2544
+line_number: 2639
 description: |
   ## Summary
   
@@ -938,7 +1266,6 @@ description: |
   ## Synopsis
   
       Jacob.JSON.parse(string) -> Object
-      Jacob.JSON.dump(object)  -> String
   
   
   ## External Dependencies
@@ -948,10 +1275,31 @@ description: |
 file: javascripts/jacob-dev.js
 
 ---
+id: "Jacob.JSON.parse"
+parent_id: "Jacob.JSON"
+type: class method
+line_number: 2657
+description: |
+  ## Summary
+  
+    Parse JSON Strings and convert it to the corresponding object.
+  
+  
+  ## Synopsis
+  
+      Jacob.JSON.parse('{"a": 1}'); // => {a: 1}
+
+signatures:
+ -
+  signature: "Jacob.JSON.parse(string)"
+  return_value: "deserialized (Object)"
+file: javascripts/jacob-dev.js
+
+---
 id: "Jacob.Template"
 parent_id: "Jacob"
 type: class
-line_number: 2573
+line_number: 2697
 description: |
   ## Summary
   
@@ -971,7 +1319,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.Template"
 parent_id: "Jacob.Template"
 type: constructor
-line_number: 2586
+line_number: 2710
 description: |
   - templateString (String): A string to interpolate. Variables use the
     sequence %{variablename}. Example: "Hello %{firstName}". In this string,
@@ -986,26 +1334,229 @@ signatures:
 file: javascripts/jacob-dev.js
 
 ---
+id: "Jacob.Template.KeyError"
+parent_id: "Jacob.Template"
+type: class
+line_number: 2730
+description: |
+  ## Summary
+  
+  Useful for custom missing and superfluous key handlers.
+  It automatically calculates missing keys, superfluous keys, expected keys
+  and given keys.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template.KeyError#template"
+parent_id: "Jacob.Template.KeyError"
+type: instance property
+line_number: 2734
+description: |
+
+
+signatures:
+ -
+  signature: "Jacob.Template.KeyError#template"
+  return_value: "template (Jacob.Template)"
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template.KeyError#expectedKeys"
+parent_id: "Jacob.Template.KeyError"
+type: instance property
+line_number: 2738
+description: |
+
+
+signatures:
+ -
+  signature: "Jacob.Template.KeyError#expectedKeys"
+  return_value: "expectedKeys (Array)"
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template.KeyError#givenKeys"
+parent_id: "Jacob.Template.KeyError"
+type: instance property
+line_number: 2742
+description: |
+
+
+signatures:
+ -
+  signature: "Jacob.Template.KeyError#givenKeys"
+  return_value: "givenKeys (Array)"
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template.KeyError#missingKeys"
+parent_id: "Jacob.Template.KeyError"
+type: instance property
+line_number: 2746
+description: |
+
+
+signatures:
+ -
+  signature: "Jacob.Template.KeyError#missingKeys"
+  return_value: "missingKeys (Array)"
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template.KeyError#superfluousKeys"
+parent_id: "Jacob.Template.KeyError"
+type: instance property
+line_number: 2750
+description: |
+
+
+signatures:
+ -
+  signature: "Jacob.Template.KeyError#superfluousKeys"
+  return_value: "superfluousKeys (Array)"
+file: javascripts/jacob-dev.js
+
+---
+id: "new Jacob.Template.KeyError"
+parent_id: "Jacob.Template.KeyError"
+type: constructor
+line_number: 2754
+description: |
+
+
+signatures:
+ -
+  signature: "new Jacob.Template.KeyError(template, variables[, message])"
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template.MissingKeyHandler"
+parent_id: "Jacob.Template"
+type: constant
+line_number: 2786
+description: |
+  ## Summary
+  
+  MissingKeyHandler is the default callback for missing keys.
+  It throws an error.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template.SuperfluousKeysHandler"
+parent_id: "Jacob.Template"
+type: constant
+line_number: 2801
+description: |
+  ## Summary
+  
+  SuperfluousKeysHandler is a callback for superfluous keys. The default is
+  none, though.
+  SuperfluousKeysHandler throws an error.
+
+file: javascripts/jacob-dev.js
+
+---
 id: "Jacob.Template.interpolate"
 parent_id: "Jacob.Template"
 type: class method
-line_number: 2612
+line_number: 2824
 description: |
-  - templateString (String): The template string to interpolate the variables into.
-  - options (Object):        Same options as the Jacob.Template constructor accepts.
-  - variables (Object):      The variables to interpolate into the template.
+  ## Summary
+  
+  This function is a shortcut for:
+      (new Jacob.Template(templateString, option)).interpolate(variables);
+  In consequence it can throw all the same errors as Jacob.Template#interpolate.
+  
+  
+  ## Synopsis
+  
+      Jacob.Template.interpolate("%{predicate} %{subject}", {}, {predicate: "Hello", subject: "World"});
+      // => "Hello World"
 
 signatures:
  -
   signature: "Jacob.Template.interpolate(templateString[, options], variables)"
   return_value: "String"
+arguments:
+ -
+  name: templateString
+  types: [String]
+  description: >
+    The template string to interpolate the variables into.
+
+ -
+  name: options
+  types: [Object]
+  description: >
+    Same options as the Jacob.Template constructor accepts.
+
+ -
+  name: variables
+  types: [Object]
+  description: >
+    The variables to interpolate into the template.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template#identifiers"
+parent_id: "Jacob.Template"
+type: instance method
+line_number: 2848
+description: |
+  ## Summary
+  
+  Returns all identifiers which can be replaced by variables.
+  
+  
+  ## Synopsis
+  
+      var template = new Jacob.Template("%{predicate} %{subject}");
+      template.identifiers() // => ["predicate", "subject"]
+
+signatures:
+ -
+  signature: "Jacob.Template#identifiers()"
+  return_value: "identifiers (Array)"
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template#interpolate"
+parent_id: "Jacob.Template"
+type: instance method
+line_number: 2880
+description: |
+  ## Summary
+  
+  Returns the template string with all identifiers replaced by the
+  values of the given variables.
+  
+  Depending on the options, this function can throw errors on missing- and
+  superfluous keys. The default is to ignore superfluous keys but throw a
+  Jacob.Template.KeyError on missing keys.
+  
+  Also see: Jacob.Template.MissingKeyHandler and Jacob.Template.SuperfluousKeyHandler
+  
+  
+  ## Synopsis
+  
+      var template = new Jacob.Template("%{predicate} %{subject}");
+      template.interpolate({predicate: "Hello", subject: "World"});
+      // => "Hello World"
+
+signatures:
+ -
+  signature: "Jacob.Template#interpolate(variables)"
+  return_value: "interpolated (String)"
 file: javascripts/jacob-dev.js
 
 ---
 id: "Jacob.Util"
 parent_id: "Jacob"
 type: mixin
-line_number: 2668
+line_number: 2919
 description: |
   # Summary
   
@@ -1017,7 +1568,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Util.clone"
 parent_id: "Jacob.Util"
 type: class method
-line_number: 2679
+line_number: 2930
 description: |
   ## Summary
   
@@ -1040,7 +1591,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Util.extend"
 parent_id: "Jacob.Util"
 type: class method
-line_number: 2693
+line_number: 2954
 description: |
   ## Summary
   
@@ -1062,5 +1613,73 @@ arguments:
   types: [Object]
   description: >
     The object which to extend with the properties from source.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Util.ownPropertyNames"
+parent_id: "Jacob.Util"
+type: class method
+line_number: 2988
+description: |
+  ## Summary
+  
+  Returns all property names that belong to the given object only
+  
+  
+  ## Synopsis
+  
+      Jacob.Util.ownPropertyNames({a: 1, b: 2}) -> ['a', 'b']
+
+signatures:
+ -
+  signature: "Jacob.Util.ownPropertyNames(object)"
+  return_value: "Object"
+arguments:
+ -
+  name: object
+  types: [Object]
+  description: >
+    The object from which to get the property names.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Util.arraySubtract"
+parent_id: "Jacob.Util"
+type: class method
+line_number: 3019
+description: |
+  ## Summary
+  
+  Returns all values of ArrayA that are not in ArrayB.
+  
+  
+  ## Synopsis
+  
+      Jacob.Util.ownPropertyNames([1, 2, 3], [3, 4, 5]) -> ["1"]
+  
+  
+  ## Warning
+  
+  Since this function uses an object as a hash to perform the subtraction,
+  all keys are treated as strings.
+
+signatures:
+ -
+  signature: "Jacob.Util.arraySubtract(arrayA, arrayB)"
+  return_value: "diff (Array)"
+arguments:
+ -
+  name: arrayA
+  types: [Array]
+  description: >
+    The minuend.
+
+ -
+  name: arrayB
+  types: [Array]
+  description: >
+    The subtrahend.
 
 file: javascripts/jacob-dev.js

@@ -83,8 +83,13 @@ namespace :jacob do
     end
   end
 
+  task :targets => :resolve do
+    #$JACOB_TARGETS = $JACOB_RESOLVED
+    $JACOB_TARGETS = {'jacob', $JACOB_RESOLVED['jacob']}
+  end
+
   desc "Generate the compiled -dev.js libraries in javascripts/"
-  task :compile => [:clobber, :copy_externals, :resolve] do
+  task :compile => [:clobber, :copy_externals, :targets] do
     require 'enumerator' # each_cons
 
     jacob_doc = File.read('README.markdown').gsub(/^/, ' *    ').chomp
@@ -121,7 +126,7 @@ namespace :jacob do
     indent    = footer[/\A */]
     footer.gsub!(/^#{indent}/, '')
 
-    $JACOB_RESOLVED.each do |lib, files|
+    $JACOB_TARGETS.each do |lib, files|
       file_list = files.map { |file| file.sub(%r{^lib/}, '') }
       header    = header.
         gsub(/__FILE__/, lib).
@@ -141,9 +146,9 @@ namespace :jacob do
   end
 
   desc "Generate the minified .js libraries in javascripts/"
-  task :minify => [:clobber, :resolve, :compile] do
+  task :minify => [:clobber, :targets, :compile] do
     require 'jsmin'
-    $JACOB_RESOLVED.each_key do |lib|
+    $JACOB_TARGETS.each_key do |lib|
       development = "javascripts/#{lib}-dev.js"
       minified    = "javascripts/#{lib}.js"
       File.open(minified, 'wb') do |file|

@@ -1,0 +1,37 @@
+body {
+  background: #eee;
+}
+#target {
+  margin-bottom: 20px;
+}
+div.example {
+  margin: 5px 5px 15px 5px;
+  padding-left: 15px;
+  border-bottom: 1px dotted black;
+}
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 8px -15px;
+}
+p {
+  font-size: 14px;
+  margin: 5px 0 3px 0;
+}
+code {
+  font-family:   monospace, sans-serif;
+  font-size:     12px;
+  background:    #fff;
+  border:        1px solid black;
+  padding:       3px;
+  white-space:   pre;
+  display:       block;
+}
+div.result {
+  font-family:   monospace, sans-serif;
+  font-size:     12px;
+  background:    #eef;
+  padding:       3px;
+  margin-bottom: 5px;
+  border:        1px solid #669;
+}

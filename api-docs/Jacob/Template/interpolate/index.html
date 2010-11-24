@@ -39,13 +39,17 @@
       
       <div class="sidebar-pane scrollable" id="menu_pane">
         <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="namespace current-parent" href="../../../Jacob/index.html" title="Jacob (namespace)">Jacob</a></div><ul><li><div class="menu-item"><a class="class" href="../../../Jacob/Barrier/index.html" title="Jacob.Barrier (class)">Jacob.Barrier</a></div></li>
-<li><div class="menu-item"><a class="mixin" href="../../../Jacob/Codec/index.html" title="Jacob.Codec (mixin)">Jacob.Codec</a></div><ul><li><div class="menu-item"><a class="mixin" href="../../../Jacob/Codec/Base64/index.html" title="Jacob.Codec.Base64 (mixin)">Jacob.Codec.Base64</a></div></li></ul></li>
-<li><div class="menu-item"><a class="class" href="../../../Jacob/GZip/index.html" title="Jacob.GZip (class)">Jacob.GZip</a></div></li>
+<li><div class="menu-item"><a class="mixin" href="../../../Jacob/Codec/index.html" title="Jacob.Codec (mixin)">Jacob.Codec</a></div><ul><li><div class="menu-item"><a class="mixin" href="../../../Jacob/Codec/Base64/index.html" title="Jacob.Codec.Base64 (mixin)">Jacob.Codec.Base64</a></div></li>
+<li><div class="menu-item"><a class="class" href="../../../Jacob/Codec/GZip/index.html" title="Jacob.Codec.GZip (class)">Jacob.Codec.GZip</a></div></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../Jacob/HTTP/index.html" title="Jacob.HTTP (class)">Jacob.HTTP</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../Jacob/I18n/index.html" title="Jacob.I18n (class)">Jacob.I18n</a></div></li>
 <li><div class="menu-item"><a class="mixin" href="../../../Jacob/JSON/index.html" title="Jacob.JSON (mixin)">Jacob.JSON</a></div></li>
-<li><div class="menu-item"><a class="class current-parent" href="../../../Jacob/Template/index.html" title="Jacob.Template (class)">Jacob.Template</a></div><ul><li><div class="menu-item"><a class="constructor" href="../../../Jacob/Template/new/index.html" title="new Jacob.Template (constructor)">new</a></div></li>
-<li><div class="menu-item"><a class="class-method current" href="../../../Jacob/Template/interpolate/index.html" title="Jacob.Template.interpolate (class method)">interpolate</a></div></li></ul></li>
+<li><div class="menu-item"><a class="class current-parent" href="../../../Jacob/Template/index.html" title="Jacob.Template (class)">Jacob.Template</a></div><ul><li><div class="menu-item"><a class="class" href="../../../Jacob/Template/KeyError/index.html" title="Jacob.Template.KeyError (class)">Jacob.Template.KeyError</a></div></li></ul><ul><li><div class="menu-item"><a class="constructor" href="../../../Jacob/Template/new/index.html" title="new Jacob.Template (constructor)">new</a></div></li>
+<li><div class="menu-item"><a class="constant" href="../../../Jacob/Template/MissingKeyHandler/index.html" title="Jacob.Template.MissingKeyHandler (constant)">MissingKeyHandler</a></div></li>
+<li><div class="menu-item"><a class="constant" href="../../../Jacob/Template/SuperfluousKeysHandler/index.html" title="Jacob.Template.SuperfluousKeysHandler (constant)">SuperfluousKeysHandler</a></div></li>
+<li><div class="menu-item"><a class="class-method current" href="../../../Jacob/Template/interpolate/index.html" title="Jacob.Template.interpolate (class method)">interpolate</a></div></li>
+<li><div class="menu-item"><a class="instance-method" href="../../../Jacob/Template/prototype/identifiers/index.html" title="Jacob.Template#identifiers (instance method)">identifiers</a></div></li>
+<li><div class="menu-item"><a class="instance-method" href="../../../Jacob/Template/prototype/interpolate/index.html" title="Jacob.Template#interpolate (instance method)">interpolate</a></div></li></ul></li>
 <li><div class="menu-item"><a class="mixin" href="../../../Jacob/Util/index.html" title="Jacob.Util (mixin)">Jacob.Util</a></div></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
@@ -81,13 +85,45 @@
   <div class="section-content">
     <div class="method-description">
         <pre class="syntax"><code class="ebnf">Jacob.Template.interpolate(templateString[, options], variables) &rarr; String</code></pre>
+  <ul class="argument-list">
+      <li>
+        <code class="argument-name">templateString</code>
+          <span class="argument-types">(<code>String</code>)</span>
+         &ndash; The template string to interpolate the variables into.
+
+      </li>
+      <li>
+        <code class="argument-name">options</code>
+          <span class="argument-types">(<code>Object</code>)</span>
+         &ndash; Same options as the Jacob.Template constructor accepts.
+
+      </li>
+      <li>
+        <code class="argument-name">variables</code>
+          <span class="argument-types">(<code>Object</code>)</span>
+         &ndash; The variables to interpolate into the template.
+
+      </li>
+  </ul> <!-- .argument-list -->
 
 
-      <ul>
-<li>templateString (String): The template string to interpolate the variables into.</li>
-<li>options (Object):        Same options as the Jacob.Template constructor accepts.</li>
-<li>variables (Object):      The variables to interpolate into the template.</li>
-</ul>
+      <h2>Summary</h2>
+
+<p>This function is a shortcut for:</p>
+
+<pre><code>(new Jacob.Template(templateString, option)).interpolate(variables);
+</code></pre>
+
+<p>In consequence it can throw all the same errors as Jacob.Template#interpolate.</p>
+
+<h2>Synopsis</h2>
+
+<div class="CodeRay">
+  <div class="code"><pre>Jacob.Template.interpolate(<span style="background-color:#fff0f0;color:#D20"><span style="color:#710">&quot;</span><span style="">%{predicate} %{subject}</span><span style="color:#710">&quot;</span></span>, {}, {<span style="color:#808">predicate</span>: <span style="background-color:#fff0f0;color:#D20"><span style="color:#710">&quot;</span><span style="">Hello</span><span style="color:#710">&quot;</span></span>, <span style="color:#808">subject</span>: <span style="background-color:#fff0f0;color:#D20"><span style="color:#710">&quot;</span><span style="">World</span><span style="color:#710">&quot;</span></span>});
+<span style="color:#888">// =&gt; &quot;Hello World&quot;</span></pre></div>
+</div>
+
+
 
 
       
@@ -104,7 +140,7 @@
       <div id="footer">
         <p><a href="">Jacob</a> v0.0.1 API documentation.</p>
         <p>
-            Last updated on November 23, 2010 at 22:08 UTC.
+            Last updated on November 24, 2010 at 11:28 UTC.
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.
         </p>

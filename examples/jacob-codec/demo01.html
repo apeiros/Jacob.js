@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Jacob.Codec</title>
+  <link rel="stylesheet" href="../examples.css" />
+  <script defer src="../../javascripts/jquery.js"></script>
+  <script defer src="../../javascripts/jacob-dev.js"></script>
+  <script defer id="code">
+$(function() {
+  $('.example').each(function(i, example) {
+    var code   = $(example).find('code').text();
+    var result = eval(code);
+    $(example).find('.result').text(result);
+  });
+});
+  </script>
+</head>
+<body>
+  <div class="examples">
+    <div class="example">
+      <h2>Example 1 - Base64 encode</h2>
+
+      <p>Code:</p>
+      <code>Jacob.Codec.base64Encode("Hello World!");</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+    </div>
+
+    <div class="example">
+      <h2>Example 2 - Base64 decode</h2>
+
+      <p>Code:</p>
+      <code>Jacob.Codec.base64Decode("SGVsbG8gV29ybGQh");</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+    </div>
+
+    <div class="example">
+      <h2>Example 3 - GZipDecode</h2>
+
+      <p>Code:</p>
+      <code>Jacob.Codec.GZipDecode("\037\213\b\000\374\300\354L\000\003\363H\315\311\311W\b\317/\312IQ\004\000\243\034)\034\f\000\000\000");</code>
+
+      <p>Result:</p>
+      <div class="result"></div>
+
+      <p>Note:</p>
+      <p>
+        Of course, with such a short text, gzip compression isn't that impressive.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

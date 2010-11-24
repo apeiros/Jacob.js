@@ -1,2 +1,0 @@
-
-if(!window.Jacob)window.Jacob={};Jacob=window.Jacob;(function(){Jacob.JSON={name:'Jacob__JSON'};Jacob.JSON.parse=jQuery.parseJSON;Jacob.JSON.dump=function Jacob__JSON__dump(){throw("Not yet implemented");};})();
