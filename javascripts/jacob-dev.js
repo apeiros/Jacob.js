@@ -12,6 +12,7 @@
   * jacob/i18n.js
   * jacob/i18n/datetime.js
   * jacob/json.js
+  * jacob/log.js
   * jacob/template.js
   * jacob/util.js
 */
@@ -2677,6 +2678,31 @@ Jacob.JSON.dump  = function Jacob__JSON__dump() {
 
 
 
+/* File jacob/log.js */
+Jacob.Log = function Jacob__Log(options) {
+  this._entries = [];
+}
+Jacob.Log.Entry = function Jacob__Log__Entry(message, options) {
+  options        = options || {}
+  this.time      = Date.now();
+  this.message   = message;
+  this.backtrace = Jacob.Util.backtrace(options.ignoreBacktraceLevels || 1);
+}
+Jacob.Log.Entry.prototype.toString = function Jacob__Log__Entry___toString() {
+  var timeString = "["+Jacob.Util.dateToISO8601(new Date(this.time))+"]";
+
+  return timeString+" "+this.message;
+}
+Jacob.Log.prototype.log = function Jacob__Log___log(message) {
+  var entry = new Jacob.Log.Entry(message, {ignoreBacktraceLevels: 2});
+  this._entries.push(entry);
+}
+Jacob.Log.prototype.toString = function Jacob__Log___toString() {
+  this._entries.join("\n");
+}
+
+
+
 /* File jacob/template.js */
 /** 
  *  class Jacob.Template
@@ -2714,6 +2740,30 @@ Jacob.Template = function Jacob__Template(templateString, options) {
   this._options        = options || {}
   if (this._options.missingKey === undefined)      this._options.missingKey      = Jacob.Template.MissingKeyHandler;
   if (this._options.superfluousKeys === undefined) this._options.superfluousKeys = Jacob.Template.SuperfluousKeysHandler;
+}
+
+
+/**
+ *    Jacob.Template#options() -> options (Object)
+ *
+ *    ## Summary
+ *
+ *    Returns the options this Jacob.Template was created with.
+ **/
+Jacob.Template.prototype.options = function Jacob__Template___options() {
+  return this._options;
+}
+
+
+/**
+ *    Jacob.Template#templateString() -> templateString (String)
+ *
+ *    ## Summary
+ *
+ *    Returns the templateString this Jacob.Template was created with.
+ **/
+Jacob.Template.prototype.templateString = function Jacob__Template___templateString() {
+  return this._templateString;
 }
 
 
@@ -2758,19 +2808,24 @@ Jacob.Template.KeyError = function Jacob__Template__KeyError(template, variables
   this.missingKeys     = Jacob.Util.arraySubtract(this.expectedKeys, this.givenKeys);
   this.superfluousKeys = Jacob.Util.arraySubtract(this.givenKeys, this.expectedKeys);
 
-  if (!message) {
-    if (this.missingKeys > 0) {
-      var given   = "'"+this.givenKeys.join("', '")+"'";
+  if (message) {
+    this.message = message;
+  } else {
+    if (this.missingKeys.length > 0) {
+      var given   = this.givenKeys.length == 0 ? 'none' : "'"+this.givenKeys.join("', '")+"'";
       var missing = "'"+this.missingKeys.join("', '")+"'";
-      this.message = "Missing keys "+missing+", given: "+given;
+      this.message = "Missing keys "+missing+". Given: "+given;
     } else if (this.superfluousKeys.length > 0) {
-      var expected    = "'"+this.expectedKeys.join("', '")+"'";
+      var expected    = this.expectedKeys.length == 0 ? 'none' : "'"+this.expectedKeys.join("', '")+"'";
       var superfluous = "'"+this.superfluousKeys.join("', '")+"'";
-      this.message = "Superfluous keys "+superfluous+", expected: "+expected;
+      this.message = "Superfluous keys "+superfluous+". Expected: "+expected;
     } else {
-      this.message = "Key error"
+      this.message = "An error occurred while interpolating '"+template.templateString()+"'";
     }
   }
+}
+Jacob.Template.KeyError.prototype.toString = function Jacob__Template__KeyError___toString() {
+  return this.message;
 }
 
 
@@ -2783,7 +2838,7 @@ Jacob.Template.KeyError = function Jacob__Template__KeyError(template, variables
  *    It throws an error.
  *
  **/
-Jacob.Template.MissingKeyHandler = function Jacob__Template__MissingKeyHandler(template, missingKey, options, variables) {
+Jacob.Template.MissingKeyHandler = function Jacob__Template__MissingKeyHandler(template, variables) {
   throw(new Jacob.Template.KeyError(template, variables));
 }
 
@@ -2798,7 +2853,7 @@ Jacob.Template.MissingKeyHandler = function Jacob__Template__MissingKeyHandler(t
  *    SuperfluousKeysHandler throws an error.
  *
  **/
-Jacob.Template.SuperfluousKeysHandler = function Jacob__Template__MissingKeyHandler(template, superfluousKeys, options, variables) {
+Jacob.Template.SuperfluousKeysHandler = function Jacob__Template__MissingKeyHandler(template, variables) {
   throw(new Jacob.Template.KeyError(template, variables));
 }
 
@@ -2879,10 +2934,10 @@ Jacob.Template.prototype.identifiers = function Jacob_Template___identifiers() {
  **/
 Jacob.Template.prototype.interpolate = function Jacob_Template___interpolate(variables, options) {
   var self            = this; // for the various closures
-  options             = options || {};
+  options             = options   || {};
   variables           = variables || {};
 
-  for(var key in this._options) if (options[key] === undefined) options[key] = this._options[key];
+  for(var key in this._options) if (!options.hasOwnProperty(key)) options[key] = this._options[key];
 
   // store all keys to detect superfluous keys later
   var superfluousKeys = {};
@@ -2892,15 +2947,14 @@ Jacob.Template.prototype.interpolate = function Jacob_Template___interpolate(var
     var identifier = match.substr(2,match.length-3);
 
     if (variables[identifier] !== undefined) {
+      delete superfluousKeys[identifier];
       return variables[identifier];
     } else if (options.missingKey) {
-      return options.missingKey(self, identifier, options, variables);
+      return options.missingKey(self, variables);
     }
   });
-  if (superfluousKeys.length > 0 && options.superfluousKeys) {
-    var superfluousKeysArray = [];
-    for(var key in superfluousKeys) superfluousKeysArray.push(key);
-    options.superfluousKeys(self, superfluousKeysArray, options, variables);
+  if (options.superfluousKeys && !Jacob.Util.isEmpty(superfluousKeys)) {
+    options.superfluousKeys(this, variables);
   }
 
   return replaced;
@@ -2930,10 +2984,12 @@ Jacob.Util = {};
 Jacob.Util.clone  = function Jacob__Util__clone(source) {
   switch(typeof(source)) {
     case "object":
-      return Jacob.Util.extend({}, source);
-    case "array":
+      if (source instanceof Array) {
+        return source.slice();
+      } else {
+        return Jacob.Util.extend({}, source);
+      }
     case "string":
-      return source.slice();
     case "number":
     default:
       return source;
@@ -3022,5 +3078,126 @@ Jacob.Util.arraySubtract = function Jacob__Util__arraySubtract(arrayA, arrayB) {
   for(var i=0; i < arrayB.length; i++) delete diffSet[arrayB[i]];
 
   return Jacob.Util.ownPropertyNames(diffSet);
+}
+
+
+/** 
+ *  Jacob.Util.backtrace(ignoreFirstNLevels, limitToNLevels) -> backtrace (Array)
+ *  - ignoreFirstNLevels (Integer): Don't report the first N levels of the backtrace.
+ *  - limitToNLevels (Integer): Report N levels at max.
+ *
+ *  ## Summary
+ *
+ *  Returns an array of function names in order of their invocation nesting.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      function outer() { return inner(); }
+ *      function inner() { return Jacob.Util.backtrace(); }
+ *      // => ["Jacob__Util__backtrace", "inner", "outer"]
+ *
+ **/
+Jacob.Util.backtrace = function Jacob__Util__backtrace(ignoreFirstNLevels, limitToNLevels) {
+  var callee = arguments.callee;
+  var trace  = [callee.name];
+  var callee = callee.caller;
+  while (callee) {
+    trace.push(callee.name || "<anonymous>");
+    callee = callee.caller;
+  }
+  limitToNLevels = limitToNLevels || trace.length;
+
+  return trace.slice(ignoreFirstNLevels || 0, limitToNLevels);
+}
+
+
+/** 
+ *  Jacob.Util.dateToISO8601(date) -> isoDate (String)
+ *  - date (Date): The date to serialize in ISO8601 format.
+ *
+ *  ## Summary
+ *
+ *  Returns a date in ISO8601 format.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.Util.dateToISO8601(new Date()); // => "2010-12-31T12:34:56"
+ *
+ **/
+Jacob.Util.dateToISO8601 = function Jacob__Util__dateToISO8601(date) {
+  var y = date.getFullYear().toString();
+  var m = (date.getMonth()+1).toString();
+  var d = date.getDate().toString();
+  var H = date.getHours().toString();
+  var M = date.getMinutes().toString();
+  var S = date.getSeconds().toString();
+  switch(y.length) {
+    case 1:   y = "000"+y; break;
+    case 2:   y =  "00"+y; break;
+    case 3:   y =   "0"+y; break;
+  }
+  if (m.length == 1) m = "0"+m;
+  if (d.length == 1) d = "0"+d;
+  if (H.length == 1) H = "0"+H;
+  if (M.length == 1) M = "0"+M;
+  if (S.length == 1) S = "0"+S;
+
+  return y+"-"+m+"-"+d+"T"+H+":"+M+":"+S;
+}
+
+/** 
+ *  Jacob.Util.isEmpty(obj) -> (Boolean)
+ *  - obj (Object): The object to test for emptiness.
+ *
+ *  ## Summary
+ *
+ *  Returns whether the given object is empty.
+ *  If an object responds to isEmpty and isEmpty is a function, then that is
+ *  used to determine emptiness. Otherwise only {}, [], "" and 0 are empty.
+ *
+ *
+ *  ## Synopsis
+ *
+ *      Jacob.Util.isEmpty({});        // => true
+ *      Jacob.Util.isEmpty({a: 1});    // => false
+ *      Jacob.Util.isEmpty([]);        // => true
+ *      Jacob.Util.isEmpty([1]);       // => false
+ *      Jacob.Util.isEmpty("");        // => true
+ *      Jacob.Util.isEmpty("hello");   // => false
+ *      Jacob.Util.isEmpty(0);         // => true
+ *      Jacob.Util.isEmpty(1);         // => false
+ *      Jacob.Util.isEmpty(new Foo()); // => false
+ *
+ **/
+Jacob.Util.isEmpty = function Jacob__Util__isEmpty(obj) {
+  if (typeof(obj.isEmpty) == "function") {
+    return obj.isEmpty();
+  } else {
+    switch(typeof(obj)) {
+      case "object":
+        if (obj instanceof Array) {
+          return obj.length == 0;
+        } else if (obj.constructor == Object) {
+          isEmpty = true;
+          for(property in obj) {
+            if (obj.hasOwnProperty(property)) {
+              isEmpty = false;
+              break;
+            }
+          }
+          return isEmpty;
+        } else {
+          return false;
+        }
+      case "string":
+        return obj === "";
+      case "number":
+        return obj === 0;
+      default:
+        return false;
+    }
+  }
 }
 })();

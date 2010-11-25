@@ -1,7 +1,7 @@
 ---
 id: "Jacob"
 type: namespace
-line_number: 98
+line_number: 99
 description: |
   JACOB
   =====
@@ -84,7 +84,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier"
 parent_id: "Jacob"
 type: class
-line_number: 132
+line_number: 133
 description: |
   ## Summary
   
@@ -117,7 +117,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.Barrier"
 parent_id: "Jacob.Barrier"
 type: constructor
-line_number: 142
+line_number: 143
 description: |
   ## Summary
   
@@ -132,7 +132,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#wait"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 168
+line_number: 169
 description: |
   ## Summary
   
@@ -162,7 +162,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#block"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 195
+line_number: 196
 description: |
   ## Summary
   
@@ -192,7 +192,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#clear"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 245
+line_number: 246
 description: |
   ## Summary
   
@@ -224,7 +224,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Barrier#release"
 parent_id: "Jacob.Barrier"
 type: instance method
-line_number: 293
+line_number: 294
 description: |
   ## Summary
   
@@ -255,7 +255,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec"
 parent_id: "Jacob"
 type: mixin
-line_number: 316
+line_number: 317
 description: |
   ## Summary
   
@@ -274,7 +274,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.GZipDecode"
 parent_id: "Jacob.Codec"
 type: class method
-line_number: 333
+line_number: 334
 alias_of: "Jacob.Codec.GZip.gunzip"
 description: |
   ## Summary
@@ -297,7 +297,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.base64Encode"
 parent_id: "Jacob.Codec"
 type: class method
-line_number: 349
+line_number: 350
 alias_of: "Jacob.Codec.Base64.encode"
 description: |
   ## Summary
@@ -320,7 +320,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.base64Decode"
 parent_id: "Jacob.Codec"
 type: class method
-line_number: 365
+line_number: 366
 alias_of: "Jacob.Codec.Base64.decode"
 description: |
   ## Summary
@@ -343,7 +343,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64"
 parent_id: "Jacob.Codec"
 type: mixin
-line_number: 390
+line_number: 391
 description: |
   ## Summary
   
@@ -368,7 +368,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64.encode"
 parent_id: "Jacob.Codec.Base64"
 type: class method
-line_number: 413
+line_number: 414
 description: |
   ## Summary
   
@@ -396,7 +396,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64.decode"
 parent_id: "Jacob.Codec.Base64"
 type: class method
-line_number: 459
+line_number: 460
 description: |
   ## Summary
   
@@ -430,7 +430,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.Base64._decodeAsArray"
 parent_id: "Jacob.Codec.Base64"
 type: class method
-line_number: 513
+line_number: 514
 description: |
   ## Summary
   
@@ -461,7 +461,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.GZip"
 parent_id: "Jacob.Codec"
 type: class
-line_number: 666
+line_number: 667
 description: |
   ## Summary
   
@@ -483,7 +483,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.Codec.GZip"
 parent_id: "Jacob.Codec.GZip"
 type: constructor
-line_number: 677
+line_number: 678
 description: |
   ## Summary
   
@@ -505,7 +505,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Codec.GZip.gunzip"
 parent_id: "Jacob.Codec.GZip"
 type: class method
-line_number: 713
+line_number: 714
 description: |
   ## Summary
   
@@ -528,7 +528,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.HTTP"
 parent_id: "Jacob"
 type: class
-line_number: 1423
+line_number: 1424
 description: |
   ## Summary
   
@@ -552,7 +552,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.HTTP.get"
 parent_id: "Jacob.HTTP"
 type: class method
-line_number: 1450
+line_number: 1451
 description: |
   ## Summary
   
@@ -592,7 +592,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n"
 parent_id: "Jacob"
 type: class
-line_number: 1528
+line_number: 1529
 description: |
   ## Summary
   
@@ -666,7 +666,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.I18n"
 parent_id: "Jacob.I18n"
 type: constructor
-line_number: 1548
+line_number: 1549
 description: |
   ## Summary
   
@@ -694,7 +694,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#t"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1587
+line_number: 1588
 related_to: "Jacob.I18n#translate"
 description: |
   ## Summary
@@ -729,7 +729,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#l"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1614
+line_number: 1615
 related_to: "Jacob.I18n#localize"
 description: |
   ## Summary
@@ -763,7 +763,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#cascadeLocales"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1645
+line_number: 1646
 description: |
   ## Summary
   
@@ -798,7 +798,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#locale"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1674
+line_number: 1675
 description: |
   ## Summary
   
@@ -830,7 +830,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#scope"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1715
+line_number: 1716
 description: |
   ## Summary
   
@@ -876,7 +876,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#translations"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1741
+line_number: 1742
 description: |
   ## Summary
   
@@ -900,7 +900,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#hasKey"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1790
+line_number: 1791
 description: |
   ## Summary
   
@@ -933,7 +933,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#normalizeKey"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1860
+line_number: 1861
 description: |
   ## Summary
   
@@ -970,7 +970,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#translate"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1899
+line_number: 1900
 description: |
   ## Summary
   
@@ -1015,7 +1015,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#localize"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 1937
+line_number: 1938
 description: |
   ## Summary
   
@@ -1049,7 +1049,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#loadLocale"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 2028
+line_number: 2029
 description: |
   ## Summary
   
@@ -1100,7 +1100,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#addTranslators"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 2050
+line_number: 2051
 description: |
   ## Summary
   
@@ -1135,7 +1135,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#addTranslations"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 2077
+line_number: 2078
 description: |
   ## Summary
   
@@ -1170,7 +1170,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#prepareNodeForAutomaticTranslation"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 2108
+line_number: 2109
 description: |
   ## Summary
   
@@ -1203,7 +1203,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n#translateNode"
 parent_id: "Jacob.I18n"
 type: instance method
-line_number: 2150
+line_number: 2151
 description: |
   ## Summary
   
@@ -1243,7 +1243,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.I18n.builtIn"
 parent_id: "Jacob.I18n"
 type: constant
-line_number: 2238
+line_number: 2239
 description: |
   ## Summary
   
@@ -1256,7 +1256,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.JSON"
 parent_id: "Jacob"
 type: mixin
-line_number: 2639
+line_number: 2640
 description: |
   ## Summary
   
@@ -1278,7 +1278,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.JSON.parse"
 parent_id: "Jacob.JSON"
 type: class method
-line_number: 2657
+line_number: 2658
 description: |
   ## Summary
   
@@ -1299,7 +1299,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template"
 parent_id: "Jacob"
 type: class
-line_number: 2697
+line_number: 2723
 description: |
   ## Summary
   
@@ -1319,7 +1319,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.Template"
 parent_id: "Jacob.Template"
 type: constructor
-line_number: 2710
+line_number: 2736
 description: |
   - templateString (String): A string to interpolate. Variables use the
     sequence %{variablename}. Example: "Hello %{firstName}". In this string,
@@ -1334,10 +1334,42 @@ signatures:
 file: javascripts/jacob-dev.js
 
 ---
+id: "Jacob.Template#options"
+parent_id: "Jacob.Template"
+type: instance method
+line_number: 2753
+description: |
+  ## Summary
+  
+  Returns the options this Jacob.Template was created with.
+
+signatures:
+ -
+  signature: "Jacob.Template#options()"
+  return_value: "options (Object)"
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Template#templateString"
+parent_id: "Jacob.Template"
+type: instance method
+line_number: 2765
+description: |
+  ## Summary
+  
+  Returns the templateString this Jacob.Template was created with.
+
+signatures:
+ -
+  signature: "Jacob.Template#templateString()"
+  return_value: "templateString (String)"
+file: javascripts/jacob-dev.js
+
+---
 id: "Jacob.Template.KeyError"
 parent_id: "Jacob.Template"
 type: class
-line_number: 2730
+line_number: 2780
 description: |
   ## Summary
   
@@ -1351,7 +1383,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.KeyError#template"
 parent_id: "Jacob.Template.KeyError"
 type: instance property
-line_number: 2734
+line_number: 2784
 description: |
 
 
@@ -1365,7 +1397,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.KeyError#expectedKeys"
 parent_id: "Jacob.Template.KeyError"
 type: instance property
-line_number: 2738
+line_number: 2788
 description: |
 
 
@@ -1379,7 +1411,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.KeyError#givenKeys"
 parent_id: "Jacob.Template.KeyError"
 type: instance property
-line_number: 2742
+line_number: 2792
 description: |
 
 
@@ -1393,7 +1425,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.KeyError#missingKeys"
 parent_id: "Jacob.Template.KeyError"
 type: instance property
-line_number: 2746
+line_number: 2796
 description: |
 
 
@@ -1407,7 +1439,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.KeyError#superfluousKeys"
 parent_id: "Jacob.Template.KeyError"
 type: instance property
-line_number: 2750
+line_number: 2800
 description: |
 
 
@@ -1421,7 +1453,7 @@ file: javascripts/jacob-dev.js
 id: "new Jacob.Template.KeyError"
 parent_id: "Jacob.Template.KeyError"
 type: constructor
-line_number: 2754
+line_number: 2804
 description: |
 
 
@@ -1434,7 +1466,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.MissingKeyHandler"
 parent_id: "Jacob.Template"
 type: constant
-line_number: 2786
+line_number: 2841
 description: |
   ## Summary
   
@@ -1447,7 +1479,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.SuperfluousKeysHandler"
 parent_id: "Jacob.Template"
 type: constant
-line_number: 2801
+line_number: 2856
 description: |
   ## Summary
   
@@ -1461,7 +1493,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template.interpolate"
 parent_id: "Jacob.Template"
 type: class method
-line_number: 2824
+line_number: 2879
 description: |
   ## Summary
   
@@ -1504,7 +1536,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template#identifiers"
 parent_id: "Jacob.Template"
 type: instance method
-line_number: 2848
+line_number: 2903
 description: |
   ## Summary
   
@@ -1526,7 +1558,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Template#interpolate"
 parent_id: "Jacob.Template"
 type: instance method
-line_number: 2880
+line_number: 2935
 description: |
   ## Summary
   
@@ -1556,7 +1588,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Util"
 parent_id: "Jacob"
 type: mixin
-line_number: 2919
+line_number: 2973
 description: |
   # Summary
   
@@ -1568,7 +1600,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Util.clone"
 parent_id: "Jacob.Util"
 type: class method
-line_number: 2930
+line_number: 2984
 description: |
   ## Summary
   
@@ -1591,7 +1623,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Util.extend"
 parent_id: "Jacob.Util"
 type: class method
-line_number: 2954
+line_number: 3010
 description: |
   ## Summary
   
@@ -1620,7 +1652,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Util.ownPropertyNames"
 parent_id: "Jacob.Util"
 type: class method
-line_number: 2988
+line_number: 3044
 description: |
   ## Summary
   
@@ -1648,7 +1680,7 @@ file: javascripts/jacob-dev.js
 id: "Jacob.Util.arraySubtract"
 parent_id: "Jacob.Util"
 type: class method
-line_number: 3019
+line_number: 3075
 description: |
   ## Summary
   
@@ -1681,5 +1713,107 @@ arguments:
   types: [Array]
   description: >
     The subtrahend.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Util.backtrace"
+parent_id: "Jacob.Util"
+type: class method
+line_number: 3101
+description: |
+  ## Summary
+  
+  Returns an array of function names in order of their invocation nesting.
+  
+  
+  ## Synopsis
+  
+      function outer() { return inner(); }
+      function inner() { return Jacob.Util.backtrace(); }
+      // => ["Jacob__Util__backtrace", "inner", "outer"]
+
+signatures:
+ -
+  signature: "Jacob.Util.backtrace(ignoreFirstNLevels, limitToNLevels)"
+  return_value: "backtrace (Array)"
+arguments:
+ -
+  name: ignoreFirstNLevels
+  types: [Integer]
+  description: >
+    Don't report the first N levels of the backtrace.
+
+ -
+  name: limitToNLevels
+  types: [Integer]
+  description: >
+    Report N levels at max.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Util.dateToISO8601"
+parent_id: "Jacob.Util"
+type: class method
+line_number: 3129
+description: |
+  ## Summary
+  
+  Returns a date in ISO8601 format.
+  
+  
+  ## Synopsis
+  
+      Jacob.Util.dateToISO8601(new Date()); // => "2010-12-31T12:34:56"
+
+signatures:
+ -
+  signature: "Jacob.Util.dateToISO8601(date)"
+  return_value: "isoDate (String)"
+arguments:
+ -
+  name: date
+  types: [Date]
+  description: >
+    The date to serialize in ISO8601 format.
+
+file: javascripts/jacob-dev.js
+
+---
+id: "Jacob.Util.isEmpty"
+parent_id: "Jacob.Util"
+type: class method
+line_number: 3174
+description: |
+  ## Summary
+  
+  Returns whether the given object is empty.
+  If an object responds to isEmpty and isEmpty is a function, then that is
+  used to determine emptiness. Otherwise only {}, [], "" and 0 are empty.
+  
+  
+  ## Synopsis
+  
+      Jacob.Util.isEmpty({});        // => true
+      Jacob.Util.isEmpty({a: 1});    // => false
+      Jacob.Util.isEmpty([]);        // => true
+      Jacob.Util.isEmpty([1]);       // => false
+      Jacob.Util.isEmpty("");        // => true
+      Jacob.Util.isEmpty("hello");   // => false
+      Jacob.Util.isEmpty(0);         // => true
+      Jacob.Util.isEmpty(1);         // => false
+      Jacob.Util.isEmpty(new Foo()); // => false
+
+signatures:
+ -
+  signature: "Jacob.Util.isEmpty(obj)"
+  return_value: "(Boolean)"
+arguments:
+ -
+  name: obj
+  types: [Object]
+  description: >
+    The object to test for emptiness.
 
 file: javascripts/jacob-dev.js
